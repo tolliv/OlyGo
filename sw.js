@@ -1,4 +1,4 @@
-// ?v=2611.03a
+// v=2611.08a
 importScripts('version.js');
 const CACHE_NAME = 'VisuGPX.Pos'+VERSION;
 const ASSETS = [

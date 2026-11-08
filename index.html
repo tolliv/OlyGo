@@ -1,6 +1,6 @@
-<!-- ?v=2611.03a -->
+<!-- v=2611.08a -->
 <!-------------------------------------------------------
- Programme GPX.Pos
+ Programme OlyGo
 --------------------------------------------------------->
 
 <!----- HEADER ------------------------------------------->
@@ -8,17 +8,17 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <link rel="manifest" href="manifest.json?v=2611.03a">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png?v=2611.03a">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png?v=2611.03a">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=2611.03a">
+  <link rel="manifest" href="manifest.json?v=2611.08a">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png?v=2611.08a">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png?v=2611.08a">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=2611.08a">
   <title>GPX.Pos</title>
   <meta charset="UTF-8">
 </head>
 <body>
 
 <!----- ECRAN HOME ----->
-<link rel='stylesheet' type='text/css' href='home.css?v=2611.03a'>
+<link rel='stylesheet' type='text/css' href='home.css?v=2611.08a'>
 <div id='scrHome' style='display: none'>
   <div id='BarreHomeHaut'>
     &nbsp;&nbsp;
@@ -57,11 +57,11 @@
     <span id='TxtVersionFuture'></span>
   </div>
 </div>
-<script src="version.js?v=2611.03a"></script>
-<script src="home.js?v=2611.03a"></script>
+<script src="version.js?v=2611.08a"></script>
+<script src="home.js?v=2611.08a"></script>
 
 <!----- ECRAN PARAM ----->
-<link rel='stylesheet' type='text/css' href='param.css?v=2611.03a'>
+<link rel='stylesheet' type='text/css' href='param.css?v=2611.08a'>
 <div id='scrParam' style='display: none'>
   <div id='BarreParamHaut'>
     &nbsp;&nbsp;
@@ -74,16 +74,10 @@
 
   <!-- GPX.Pos -->
   <div style='font-size: 1.2em;'><b>Paramètres Cloud</b></div>
-  Adresse URL
-    <input class='ZoneParamSaisie' type='text' id='TxtURL' placeholder="(https://...)"><br>
-    <div style='height: 5px;'></div>
-  Clé
-    <input class='ZoneParamSaisie' type='text' id='TxtKEY' placeholder="(sb_publishable...)"><br>
-    <div style='height: 5px;'></div>
-  Numéro utilisateur
-  <input class='ZoneParamSaisie' type='text' id='TxtUSER' placeholder="(6 chiffres)"><br>
+  ID
+  <textarea type='texte' id='TxtID'></textarea><br>
   <div style='height: 5px;'></div>
-  <button id="ButCopierID" onclick="ButCopierIDClick()" style='display: none;'>Copier</button>
+  <button id="ButCopierID" onclick="ButCopierIDClick()" style='display: in-line;'>Copier</button>
   <button id="ButTesterID" onclick="ButTesterIDClick()">Tester</button> <span id='txtResultatTestID'></span>
   <br>
   <br>
@@ -147,11 +141,11 @@
   <br>
 </div>
 
-<script src="param.js?v=2611.03a"></script>
-<script src="driverSupabase.js?v=2611.03a"></script>
+<script src="param.js?v=2611.08a"></script>
+<script src="driverSupabase.js?v=2611.08a"></script>
 
 <!----- ECRAN TRAITEMENTS ----->
-<link rel='stylesheet' type='text/css' href='traitements.css?v=2611.03a'>
+<link rel='stylesheet' type='text/css' href='traitements.css?v=2611.08a'>
 <div id="scrTrait" style="display: none">
   <div id='BarreTraitChoix'>
     <div id='TxtTraitTitre'>---</div>
@@ -187,11 +181,11 @@
   <div id='TxtTraitInfos'>
   </div>
 </div>
-<script src="traitements.js?v=2611.03a"></script>
-<script src="geolocalisation.js?v=2611.03a"></script>
+<script src="traitements.js?v=2611.08a"></script>
+<script src="geolocalisation.js?v=2611.08a"></script>
 
 <!----- ECRAN TEXTE ----->
-<link rel='stylesheet' type='text/css' href='texte.css?v=2611.03a'>
+<link rel='stylesheet' type='text/css' href='texte.css?v=2611.08a'>
 <div id="scrTexte" style="display: none">
   <div id='BarreTexteHaut'>
     &nbsp;&nbsp;
@@ -207,10 +201,10 @@
   </div>
   <div id='TxtFormated'></div>
 </div>
-<script src="texte.js?v=2611.03a"></script>
+<script src="texte.js?v=2611.08a"></script>
 
 <!----- ECRAN EDITION ----->
-<link rel='stylesheet' type='text/css' href='edit.css?v=2611.03a'>
+<link rel='stylesheet' type='text/css' href='edit.css?v=2611.08a'>
 <div id="scrEdit" style="display: none">
   <div id='BarreEditHaut'>
     &nbsp;&nbsp;
@@ -226,10 +220,10 @@
   </div>
   <textarea id='TxtEditInput' style='display: none;'></textarea>
 </div>
-<script src="edit.js?v=2611.03a"></script>
+<script src="edit.js?v=2611.08a"></script>
 
 <!----- ECRAN METEO ----->
-<link rel='stylesheet' type='text/css' href='meteo.css?v=2611.03a'>
+<link rel='stylesheet' type='text/css' href='meteo.css?v=2611.08a'>
 <div id="scrMeteo" style="display: none">
   <div id='BarreMeteoHaut'>
     <div id='BarreMeteoHautL1'>
@@ -260,10 +254,10 @@
   <span id='TxtResume'></span>
   <br>
 </div>
-<script src="meteo.js?v=2611.03a"></script>
+<script src="meteo.js?v=2611.08a"></script>
 
 <!----- ECRAN CHOIX DE L'EMPLACEMENT ----->
-<link rel='stylesheet' type='text/css' href='emplacements.css?v=2611.03a'>
+<link rel='stylesheet' type='text/css' href='emplacements.css?v=2611.08a'>
 <div id="scrChoixEmplacement" style="display: none">
   <div id='BarreChoixEmplacementHaut'>
     &nbsp;&nbsp;
@@ -278,10 +272,10 @@
   </div>
   <br>
 </div>
-<script src="emplacements.js?v=2611.03a"></script>
+<script src="emplacements.js?v=2611.08a"></script>
 
 <!----- ECRAN GESTION EMPLACEMENTS ----->
-<link rel='stylesheet' type='text/css' href='emplacements.css?v=2611.03a'>
+<link rel='stylesheet' type='text/css' href='emplacements.css?v=2611.08a'>
 <div id="scrGestionEmplacements" style="display: none">
 
   <div id='BarreGestionEmplacementsHaut'>
@@ -324,7 +318,7 @@
 </div>
 
 <!----- ECRAN REQUETES ----->
-<link rel='stylesheet' type='text/css' href='requetes.css?v=2611.03a'>
+<link rel='stylesheet' type='text/css' href='requetes.css?v=2611.08a'>
 <div id='scrReq' style='display: none'>
   <div id='BarreReqHaut'>
     &nbsp;&nbsp;
@@ -349,10 +343,10 @@
     </div>
   </div>
 </div>
-<script src="requetes.js?v=2611.03a"></script>
+<script src="requetes.js?v=2611.08a"></script>
 
 <!----- ECRAN AIDE ----->
-<link rel='stylesheet' type='text/css' href='aide.css?v=2611.03a'>
+<link rel='stylesheet' type='text/css' href='aide.css?v=2611.08a'>
 <div id='scrAide' style='display: none'>
   <div id='BarreAideHaut'>
     &nbsp;&nbsp;
@@ -370,7 +364,7 @@
     <div id='TxtAide'></div>
   </div>
 </div>
-<script src="aide.js?v=2611.03a"></script>
+<script src="aide.js?v=2611.08a"></script>
 
 </body>
 </html>

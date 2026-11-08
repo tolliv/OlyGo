@@ -36,10 +36,7 @@ function ButParamValiderClick()
   else if  (pid('RadIcon').checked) lModele = 3;
   else if  (pid('RadEcmwf').checked) lModele = 4;
 
-
-  localStorage.setItem('TxtURL', pid('TxtURL').value);
-  localStorage.setItem('TxtKEY', pid('TxtKEY').value);
-  localStorage.setItem('TxtUSER', pid('TxtUSER').value);
+  localStorage.setItem('TxtID', pid('TxtID').value);
   localStorage.setItem('Precision', pid('TxtPrecision').value);
   localStorage.setItem('TempsMaxLocalisation', pid('TxtTempsMaxLocalisation').value);
   localStorage.setItem('SimulationGeolocalisation', (pid('ChkSimulation').checked?"1":"0"));
@@ -58,29 +55,31 @@ function ButParamValiderClick()
 //-------------------------------------------------------
 // Lit les paramètres dans le local storage
 //-------------------------------------------------------
-function LitParametres()
+async function LitParametres()
 {
   let param;
 
   //----- Paramètres Cloud -----
 
-  param = localStorage.getItem('TxtURL');
+  param = localStorage.getItem('TxtID');
   if (param == null)
-      param = "(none)";
-  pid('TxtURL').value = param;
-  API_URL = param;
+      param = "";
+  pid('TxtID').value = param;
 
-  param = localStorage.getItem('TxtKEY');
-  if (param == null)
-      param = "(none)";
-  pid('TxtKEY').value = param;
-  API_KEY = param;
-
-  param = localStorage.getItem('TxtUSER');
-  if (param == null)
-      param = "(none)";
-  pid('TxtUSER').value = param;
-  USER = param;
+  if (param != "")
+  {
+    ID = param;
+    const lRetDecode = await decodeSupabaseConfig(ID);
+    API_URL = lRetDecode.url;
+    API_KEY = lRetDecode.key;
+    USER    = lRetDecode.usr;
+  }
+  else
+  {
+    API_URL = "";
+    API_KEY = "";
+    USER = "";
+  }
 
   //----- Paramètres géolocalisation -----
 
@@ -159,6 +158,22 @@ function LitParametres()
   ChangeTaillePolice();
 }
 
+//--------------------------------------------------------------------------------------------------
+// Copie dans le presse papier
+//--------------------------------------------------------------------------------------------------
+async function copierDansPressePapier(texte)
+{
+  try
+  {
+    await navigator.clipboard.writeText(texte);
+  }
+  catch (err)
+  {
+    console.error("Erreur lors de la copie : ", err);
+  }
+}
+
+
 //-------------------------------------------------------
 // Change la taille de la police des éléments
 //-------------------------------------------------------
@@ -191,44 +206,19 @@ function changerTaillePoliceZoneSaisieQuery(NomClasse, nouvelleTaille)
 //-------------------------------------------------------
 async function ButCopierIDClick()
 {
-  if (0) // TODO créer l'adresse complète
+  const lTxtID = pid('TxtID').value;
+  const lRetDecode = await decodeSupabaseConfig(ID);
+  if (lRetDecode.url != "")
   {
-    const lMemo = pid('TxtVisuGPX').value;
-    pid('TxtVisuGPX').value = "https://www.visugpx.com/" + lMemo;
-
-    // Sélectionner le contenu et copier
-    pid('TxtVisuGPX').select();
-    pid('TxtVisuGPX').setSelectionRange(0, 99999); // Pour compatibilité mobile
-
-    // Ajouter une pause de 100ms
-    await new Promise(resolve => setTimeout(resolve, 100));
-
-    try
-    {
-      document.execCommand('copy');
-      pid('ButCopierID').innerHTML = "Copié";
-      pid('ButCopierID').style.background = "#0F0";
-      pid('ButCopierID').style.color = "#000";
-      await new Promise(resolve => setTimeout(resolve, 500));
-      pid('ButCopierID').innerHTML = "Copier";
-      pid('ButCopierID').style.background = "#008";
-      pid('ButCopierID').style.color = "#FFF";
-    }
-    catch (err)
-    {
-      pid('ButCopierID').innerHTML = "Erreur";
-      pid('ButCopierID').style.background = "#F00";
-      await new Promise(resolve => setTimeout(resolve, 500));
-      pid('ButCopierID').innerHTML = "Copier dans Presse-papier";
-      pid('ButCopierID').style.background = "#008";
-    }
-
-    pid('TxtVisuGPX').value = lMemo;
-    window.getSelection().removeAllRanges();
-    document.activeElement.blur();
+    API_URL = lRetDecode.url;
+    API_KEY = lRetDecode.key;
+    USER    = lRetDecode.usr;
+    const lBase62 = await encodeSupabaseConfig(API_URL, API_KEY, USER, 0);
+    const lLien = "https://tolliv.github.io/OlySee/index.html?id=" + lBase62;
+    copierDansPressePapier(lLien);
+    console.log("Lien copié dans le presse-papier : " + lLien);
   }
 }
-
 
 //-------------------------------------------------------
 // Test de la connexion à la base de données
@@ -236,7 +226,23 @@ async function ButCopierIDClick()
 async function ButTesterIDClick()
 {
   pid('txtResultatTestID').innerHTML = "En cours...";
-  const lRet = await SupabaseTestConnexion();
-  pid('txtResultatTestID').innerHTML = lRet;
-  console.log("Test de connexion : " + lRet);
+  await sleep(300);
+
+  // On Récupère l'ID du champ
+  const ID = pid('TxtID').value;
+  const lRetDecode = await decodeSupabaseConfig(ID);
+
+  // L'ID est correct
+  if (lRetDecode.url != "")
+  {
+    API_URL = lRetDecode.url;
+    API_KEY = lRetDecode.key;
+    USER = lRetDecode.usr;
+    const lRetTest = await SupabaseTestConnexion();
+    pid('txtResultatTestID').innerHTML = lRetTest;
+  }
+  else
+  {
+    pid('txtResultatTestID').innerHTML = "Erreur sur l'ID";
+  }
 }

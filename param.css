@@ -61,6 +61,20 @@
   color: blue;
 }
 
+#TxtID
+{
+  width: 100%;
+  height: 80px;
+  box-sizing: border-box;
+  border: none;
+  font-family: sans-serif;
+  color: blue;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  resize: none;
+}
+
+
 #TxtCoordonnees
 {
   width: 80%;
@@ -80,6 +94,7 @@
   color: white;
   border: 1px solid #222;
   border-shadow: none;
+  pointer: cursor;
 }
 
 #ButTesterID
@@ -92,4 +107,5 @@
   color: white;
   border: 1px solid #222;
   border-shadow: none;
+  pointer: cursor;
 }

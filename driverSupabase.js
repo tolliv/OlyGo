@@ -4,9 +4,10 @@
 //==================================================================================================
 
 // URL de votre application web Google Apps Script
-var API_URL = "?";
-var API_KEY = "?";
-var USER    = "?";
+var API_URL = "";
+var API_KEY = "";
+var USER    = "";
+var ID      = "";
 
 //--------------------------------------------------------------------------------------------------
 // Date au format Supabase compacté par tolliv
@@ -210,6 +211,7 @@ async function SupabaseWriteNomItineraire(nouveau)
       msg: nouveau
   };
   lRet = await SupabaseWrite(nouveauPoint);
+  return (lRet);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -241,6 +243,148 @@ async function SupabaseEffaceItineraire()
              + "&type=eq.0";
   let lStatus = await SupabaseDelete(lCmd);
   return(lStatus);
+}
+
+
+//==================================================================================================
+// Chiffrement et déchiffrement
+//==================================================================================================
+
+
+//--------------------------------------------------------------------------------------------------
+// Calcule un CRC16 (CCITT) sur un Uint8Array
+//--------------------------------------------------------------------------------------------------
+function calculateCRC16(buffer)
+{
+  let crc = 0xFFFF;
+  for (let i = 0; i < buffer.length; i++)
+  {
+    crc ^= (buffer[i] << 8);
+    for (let j = 0; j < 8; j++)
+    {
+      crc = (crc & 0x8000) ? (crc << 1) ^ 0x1021 : (crc << 1);
+    }
+  }
+  return(crc & 0xFFFF);
+}
+
+
+//--------------------------------------------------------------------------------------------------
+// Conversion binaire <-> base62
+//--------------------------------------------------------------------------------------------------
+// Alphabet Base62
+const B62_CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
+// Encode un Uint8Array en chaîne Base62
+function toBase62(bytes) {
+    let n = BigInt('0x' + Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join(''));
+    if (n === 0n) return B62_CHARS[0];
+    let res = '';
+    while (n > 0n) {
+        res = B62_CHARS[Number(n % 62n)] + res;
+        n /= 62n;
+    }
+    return res;
+}
+
+// Décode une chaîne Base62 en Uint8Array
+function fromBase62(str) {
+    let n = 0n;
+    for (const char of str) {
+        const idx = B62_CHARS.indexOf(char);
+        if (idx === -1) throw new Error("Caractère Base62 invalide");
+        n = n * 62n + BigInt(idx);
+    }
+    let hex = n.toString(16);
+    if (hex.length % 2) hex = '0' + hex;
+    const bytes = new Uint8Array(hex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+    return bytes;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Encode et compresse la configuration
+//--------------------------------------------------------------------------------------------------
+async function encodeSupabaseConfig(url, key, usr, admin)
+{
+    try {
+        const payload = JSON.stringify({ u: url, k: key, i: usr, a: admin ? 1 : 0 });
+
+        const stream = new Blob([payload]).stream().pipeThrough(new CompressionStream('deflate-raw'));
+        const compressedBuffer = await new Response(stream).arrayBuffer();
+        let bytes = new Uint8Array(compressedBuffer);
+
+        // --- EFFET AVALANCHE (Double passe non-linéaire) ---
+
+        // Passe 1 : Avant
+        let salt = 0x42;
+        for (let i = 0; i < bytes.length; i++) {
+            bytes[i] ^= salt;
+            salt = (salt + bytes[i]) & 0xFF; // Mélange non-linéaire
+        }
+
+        // Passe 2 : Arrière (pour qu'un changement à la fin impacte le début)
+        let salt2 = 0x99;
+        for (let i = bytes.length - 1; i >= 0; i--) {
+            bytes[i] ^= salt2;
+            salt2 = (salt2 + bytes[i]) & 0xFF;
+        }
+
+        // Ajout du CRC16
+        const crc = calculateCRC16(bytes);
+        const finalBytes = new Uint8Array(bytes.length + 2);
+        finalBytes.set(bytes);
+        finalBytes[bytes.length] = (crc >> 8) & 0xFF;
+        finalBytes[bytes.length + 1] = crc & 0xFF;
+
+        return toBase62(finalBytes);
+    } catch (error) {
+        console.error("Erreur encode : " + error);
+        return "";
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Décode et décompresse la configuration
+//--------------------------------------------------------------------------------------------------
+async function decodeSupabaseConfig(encodedStr) {
+    const emptyRes = { url: "", key: "", usr: "", admin: false };
+    try {
+        if (!encodedStr) return emptyRes;
+
+        const allBytes = fromBase62(encodedStr);
+        if (allBytes.length <= 2) return emptyRes;
+
+        const dataBytes = allBytes.slice(0, allBytes.length - 2);
+        const receivedCrc = (allBytes[allBytes.length - 2] << 8) | allBytes[allBytes.length - 1];
+
+        if (calculateCRC16(dataBytes) !== receivedCrc) return emptyRes;
+
+        // --- INVERSION DE L'EFFET AVALANCHE ---
+
+        // Inverser Passe 2 (Arrière)
+        let salt2 = 0x99;
+        for (let i = dataBytes.length - 1; i >= 0; i--) {
+            let current = dataBytes[i];
+            dataBytes[i] ^= salt2;
+            salt2 = (salt2 + current) & 0xFF;
+        }
+
+        // Inverser Passe 1 (Avant)
+        let salt = 0x42;
+        for (let i = 0; i < dataBytes.length; i++) {
+            let current = dataBytes[i];
+            dataBytes[i] ^= salt;
+            salt = (salt + current) & 0xFF;
+        }
+
+        const stream = new Blob([dataBytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+        const decompressedBuffer = await new Response(stream).arrayBuffer();
+        const obj = JSON.parse(new TextDecoder().decode(decompressedBuffer));
+
+        return { url: obj.u, key: obj.k, usr: obj.i, admin: obj.a === 1 };
+    } catch (error) {
+        return emptyRes;
+    }
 }
 
 
