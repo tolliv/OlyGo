@@ -1,0 +1,396 @@
+//==================================================================================================
+// Gestion des requêtes pour Supabase
+// Tag 2610.18
+//==================================================================================================
+
+// URL de votre application web Google Apps Script
+var API_URL = "?";
+var API_KEY = "?";
+var USER    = "?";
+
+//--------------------------------------------------------------------------------------------------
+// Date au format Supabase compacté par tolliv
+// 261011093112 pour 2026 octobre 11 : 09h31m12s
+//--------------------------------------------------------------------------------------------------
+function DateSupabase()
+{
+  const now = new Date();
+
+  // Récupération des composants de la date
+  const yy = String(now.getFullYear()).slice(-2); // Les 2 derniers chiffres de l'année
+  const mm = String(now.getMonth() + 1).padStart(2, '0'); // Mois (0-11 donc +1)
+  const dd = String(now.getDate()).padStart(2, '0');
+  const hh = String(now.getHours()).padStart(2, '0');
+  const mi = String(now.getMinutes()).padStart(2, '0');
+  const ss = String(now.getSeconds()).padStart(2, '0');
+
+  // Concaténation au format nombre 261011093112
+  const result = yy + mm + dd + hh + mi + ss;
+  return(Number(result, 10));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Formate une chaîne de date
+// Aujourd'hui, Hier, ou Date complète
+// On peut forcer à Date complète avec le paramètre mode = 'complete'
+//--------------------------------------------------------------------------------------------------
+function FormaterDateRelative(dateStr, mode)
+{
+  const flagComplete = (mode=='complete'?true:false);
+  const d = dateStr.toString();
+
+  // Extraction des segments
+  const annee = 2000 + parseInt(d.substring(0, 2), 10);
+  const moisIndex = parseInt(d.substring(2, 4), 10) - 1;
+  const jour = parseInt(d.substring(4, 6), 10);
+  const heure = parseInt(d.substring(6, 8), 10);
+  const min = d.substring(8, 10);
+
+  // Création de l'objet Date pour la comparaison (à minuit pour ignorer l'heure)
+  const dateCible = new Date(annee, moisIndex, jour);
+
+  const aujourdhui = new Date();
+  aujourdhui.setHours(0, 0, 0, 0);
+
+  const hier = new Date(aujourdhui);
+  hier.setDate(aujourdhui.getDate() - 1);
+
+  // Préparation de l'heure
+  const heureFormattee = `${heure}h${min}`;
+
+  // Comparaison
+  if (!flagComplete && (dateCible.getTime() === aujourdhui.getTime()))
+    return { j:"Aujourd'hui", h:heureFormattee };
+
+  else if (!flagComplete && (dateCible.getTime() === hier.getTime()))
+    return { j:"Hier", h:heureFormattee };
+
+  else
+  {
+    const moisNoms = ["janv", "févr", "mars", "avr", "mai", "juin",
+                      "juil", "août", "sept", "oct", "nov", "déc"];
+    return { j:jour + " " + moisNoms[moisIndex] + " " + annee, h:heureFormattee };
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Vérification de la connexion à la base de données
+// Lecture d'une ligne
+//--------------------------------------------------------------------------------------------------
+async function SupabaseTestConnexion()
+{
+  var lRet;
+  var lCmd;
+  var retStatus;
+  do
+  {
+    // Connexion
+    lCmd = "limit=1";
+    lRet = await SupabaseRead(lCmd);
+    if (lRet.status != "OK")
+    {
+      retStatus = lRet.status;
+      break;
+    }
+
+    // Ecriture 301 (ne sert qu'au test écriture/lecture)
+    const lDate = DateSupabase();
+    const nouveauPoint =
+    {
+        date: lDate,
+        user: USER,
+        type: 301,
+        msg: "test Write/Read"
+    };
+    lRet = await SupabaseWrite(nouveauPoint);
+    if (lRet != "OK")
+    {
+      retStatus = "Erreur pendant le test d'écriture";
+      break;
+    }
+
+    // Relecture 301 (ne sert qu'au test écriture/lecture)
+    lCmd = "user=eq." + USER
+         + "&type=eq.301"
+         + "&order=date.desc"
+         + "&limit=100";
+    lRet = await SupabaseRead(lCmd);
+    if ( (lRet.status != "OK") || (lRet.length == 0) )
+    {
+      retStatus = "Erreur pendant le test de lecture";
+      break;
+    }
+
+    // Suppression si 301 existant
+    if (lRet.length > 0)
+    {
+      const lCmd = "user=eq." + USER
+                 + "&type=eq.301";
+      let lStatus = await SupabaseDelete(lCmd);
+      if (lStatus != "OK")
+      {
+        retStatus = "Erreur pendant le test de suppression";
+        break;
+      }
+    }
+
+    // Relecture 301 (on ne doit plus en avoir)
+    lCmd = "user=eq." + USER
+         + "&type=eq.301"
+         + "&order=date.desc"
+         + "&limit=100";
+    lRet = await SupabaseRead(lCmd);
+    if ( (lRet.status != "OK") || (lRet.length != 0) )
+    {
+      retStatus = "Erreur pendant le test de relecture";
+      break;
+    }
+
+    // Tout est bon
+    retStatus = "OK";
+  } while(0);
+  return (retStatus);
+}
+
+
+//--------------------------------------------------------------------------------------------------
+// Ecrit le Prénom
+// Depuis la variable dans gPrenom
+//--------------------------------------------------------------------------------------------------
+async function SupabaseWritePrenom(nouveau)
+{
+  // Effacement des anciens prénoms
+  const lCmd = "user=eq." + USER
+             + "&type=eq.1000";
+  let lStatus = await SupabaseDelete(lCmd);
+
+  // Ecriture du nouveau prénom
+  const lDate = DateSupabase();
+  const nouveauPoint =
+  {
+      date: lDate,
+      user: USER,
+      type: 1000,
+      msg: nouveau
+  };
+  const lRet = await SupabaseWrite(nouveauPoint);
+  return(lRet);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Lit le prénom
+//--------------------------------------------------------------------------------------------------
+async function SupabaseReadPrenom()
+{
+  var lRet;
+  var lCmd;
+  var retStatus;
+
+  // Lecture 1000
+  lCmd = "user=eq." + USER
+       + "&type=eq.1000"
+       + "&order=date.desc"
+       + "&limit=1";
+  lRet = await SupabaseRead(lCmd);
+  return (lRet);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Ecrit le nom de l'itinéraire
+// Depuis la variable dans gNomItineraire
+//--------------------------------------------------------------------------------------------------
+async function SupabaseWriteNomItineraire(nouveau)
+{
+  const lDate = DateSupabase();
+  const nouveauPoint =
+  {
+      date: lDate,
+      user: USER,
+      type: 302,
+      msg: nouveau
+  };
+  lRet = await SupabaseWrite(nouveauPoint);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Lit le nom de l'itinéraire
+// Est mis dans gNomItineraire
+//--------------------------------------------------------------------------------------------------
+async function SupabaseReadNomItineraire()
+{
+  var lRet;
+  var lCmd;
+  var retStatus;
+
+  // Lecture 302
+  lCmd = "user=eq." + USER
+       + "&type=eq.302"
+       + "&order=date.desc"
+       + "&limit=1";
+  lRet = await SupabaseRead(lCmd);
+  return (lRet);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Efface l'itinéraire en cours dans la base de données
+//--------------------------------------------------------------------------------------------------
+async function SupabaseEffaceItineraire()
+{
+  // Efface l'itinéraire 0
+  const lCmd = "user=eq." + USER
+             + "&type=eq.0";
+  let lStatus = await SupabaseDelete(lCmd);
+  return(lStatus);
+}
+
+
+//====================== COMMANDES DE BASE =========================================================
+
+
+//--------------------------------------------------------------------------------------------------
+// Envoie un nouveau point dans la base de données
+//--------------------------------------------------------------------------------------------------
+async function SupabaseWrite(data)
+{
+  try
+  {
+    const response = await fetch(API_URL,
+    {
+      method: 'POST',
+      headers: {
+        'apikey': API_KEY,
+        'Authorization': `Bearer ${API_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal' // Ne renvoie pas la ligne insérée
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (!response.ok)
+    {
+      const error = await response.json();
+      return("Erreur SupabaseSendPoint : " + error.message);
+    }
+   return("OK");
+  }
+  catch (error)
+  {
+    return("Erreur SupabaseSendPoint : " + error);
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Lit un nombre de points dans la base de données
+// En partant de la fin
+//--------------------------------------------------------------------------------------------------
+async function SupabaseRead(pCmd)
+{
+  try
+  {
+    const url = API_URL + "?" + pCmd;
+    const response = await fetch(url,
+    {
+      method: 'GET',
+      headers:
+      {
+        'apikey': API_KEY,
+        'Authorization': `Bearer ${API_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok)
+    {
+      const error = await response.json();
+      return {status:"Erreur SupabaseRead : " + error.message, length:0, data:null};
+    }
+
+    const lData = await response.json();
+    if (lData && lData.length == 0)
+      return {status:"OK", length:0, data:null};
+
+    if (lData && lData.length > 0)
+    {
+      return {status:"OK", length:lData.length , data:lData};
+    }
+  }
+  catch (error)
+  {
+      return {status:"Erreur SupabaseRead", length:0, data:null};
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Supprime des éléments dans la base de données selon une condition
+//--------------------------------------------------------------------------------------------------
+async function SupabaseDelete(pCmd)
+{
+  try
+  {
+    const url = API_URL + "?" + pCmd;
+    const response = await fetch(url,
+    {
+      method: 'DELETE', // Méthode HTTP pour supprimer
+      headers: {
+        'apikey': API_KEY,
+        'Authorization': `Bearer ${API_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok)
+    {
+      const error = await response.json();
+      return("Erreur SupabaseDelete : " + error.message);
+    }
+    return("OK");
+  }
+  catch (error)
+  {
+    return("Erreur SupabaseDelete : " + error);
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Compte le nombre de points correspondant à un critère
+//--------------------------------------------------------------------------------------------------
+async function SupabaseCount(pCmd)
+{
+  try
+  {
+    const url = API_URL + "?" + pCmd;
+    const response = await fetch(url,
+    {
+      method: 'GET',
+      headers: {
+        'apikey': API_KEY,
+        'Authorization': `Bearer ${API_KEY}`,
+        'Prefer': 'count=exact' // Demande à Supabase de calculer le total
+      }
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      return { status: "Erreur SupabaseCount : " + error.message, count: -1 };
+    }
+
+    // Le résultat se trouve dans le header 'content-range'
+    // Format reçu : "0-0/125" (où 125 est le total)
+    const contentRange = response.headers.get('content-range');
+    let total = 0;
+
+    if (contentRange)
+    {
+      const parts = contentRange.split('/');
+      if (parts.length > 1)
+      {
+        total = parseInt(parts[1], 10);
+      }
+    }
+    return { status: "OK", count: total };
+  }
+  catch (error)
+  {
+    return { status: "Erreur SupabaseCount : " + error, count: -1 };
+  }
+}

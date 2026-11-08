@@ -1,0 +1,333 @@
+#BarreMeteoHaut
+{
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  width: 100%;
+  height: 90px;
+  color: black;
+  background-color: #CCC;
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: left;
+  z-index: 1000;
+}
+#BarreMeteoHautL1
+{
+  height: 60px;
+  background-color: #CCC;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+#BarreMeteoHautL2
+{
+  height: 40px;
+  background-color: #CCC;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.BoutonModele
+{
+  height: 26px;
+  margin: 2px;
+  width: 60px;
+  background-color: #FFF;
+  border: 1px solid #999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8em;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.BoutonHJ
+{
+  height: 26px;
+  width: 40px;
+  margin: 2px;
+  background-color: #FFF;
+  border: 1px solid #999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.2em;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+#ButMeteoRetour
+{
+  width: 46px;
+  height: 46px;
+  border-radius: 23px;
+  background-size: 46px 46px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  overflow: hidden;
+  cursor: pointer;
+  background-image: url('imgGauche.png');
+  border: 1px solid #222;
+  border-shadow: none;
+}
+
+#ButMeteoGPSNew
+{
+  width: 46px;
+  height: 46px;
+  border-radius: 23px;
+  background-size: 46px 46px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  overflow: hidden;
+  cursor: pointer;
+  background-image: url('imgNewGPSBulletin.png');
+  border: 1px solid #222;
+  border-shadow: none;
+}
+
+#ButChoixEmplacement
+{
+  width: 46px;
+  height: 46px;
+  border-radius: 23px;
+  background-size: 46px 46px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: #FFF;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 20px;
+  border: 1px solid #222;
+  border-shadow: none;
+}
+
+#ButGestionEmplacements
+{
+  width: 46px;
+  height: 46px;
+  border-radius: 23px;
+  background-size: 46px 46px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: #CFC;
+  overflow: hidden;
+  cursor: pointer;
+  background-image: url('imgEmplacements.png');
+  border: 1px solid #222;
+  border-shadow: none;
+}
+
+/*------------------------------------------------------------------------------------------------*/
+/* Tableau pour le résumé des jours */
+.TableMeteoSemaine
+{
+  width: 100%;
+  border-collapse: collapse; /* Fusionne les bordures des cellules */
+  table-layout: fixed;
+  text-align: center;
+  border: 1px solid #CCC;
+  background-color: #FFF;
+  font-weight: normal;
+}
+
+/* Ligne entête simple largeur */
+.RH
+{
+  border: 1px solid #CCC;
+  background-color: #F2F2F2;
+  width: 10%;
+}
+
+/* 1e colonne (Jours) */
+.RCOL1
+{
+  border: 1px solid #CCC;
+  background-color: #F2F2F2;
+  width: 10%;
+}
+
+/* 2e colonne (Températures) */
+.RCOL2
+{
+  border: 1px solid #CCC;
+  background-color: #FFF;
+  width: 10%;
+}
+
+/* Cellule normale */
+.RN
+{
+  border: 1px solid #CCC;
+  background-color: #FFF;
+  font-weight: normal;
+  width: 10%;
+}
+
+
+
+/*------------------------------------------------------------------------------------------------*/
+/* Tableau pour les jours heure par heure */
+.TableMeteoJours
+{
+  width: 100%;
+  border-collapse: collapse; /* Fusionne les bordures des cellules */
+  table-layout: fixed;
+  text-align: center;
+  border: 1px solid #CCC;
+  background-color: #FFF;
+}
+
+/* Colonne Etat ciel */
+.CIEL
+{
+  border: 1px solid #CCC;
+  font-family: monospace;
+}
+.CIELHR
+{
+  border: 1px solid #CCC;
+  font-family: monospace;
+  background-color: #CFC;
+}
+
+/* Ligne entête (heures) */
+.TH
+{
+  border: 1px solid #CCC;
+  background-color: #F2F2F2;
+  font-size: 0.9em;
+  font-weight: bold;
+  width: 10%;
+}
+
+/* Colonne Double */
+.TH-DOUBLE
+{
+  border: 1px solid #CCC;
+  background-color: #F2F2F2;
+  font-size: 0.9em;
+  font-weight: bold;
+  width: 15%;
+}
+
+
+
+/* Style normal */
+.NR
+{
+  border: 1px solid #CCC;
+}
+
+/* Style Heure */
+.HR
+{
+  border: 1px solid #CCC;
+  background-color: #CFC;
+}
+
+/* Rouge pour Tmax */
+.RG
+{
+  border: 1px solid #CCC;
+  background-color: #F00;
+  color: #FFF;
+}
+
+/* Cyan pour Tmin */
+.CY
+{
+  border: 1px solid #CCC;
+  background-color: #08C;
+  color: #FFF;
+}
+
+/* Bleu pour pluie */
+.BF
+{
+  border: 1px solid #CCC;
+  background-color: #00F;
+  color: #FFF;
+}
+
+/* Bleu très foncé pour beaucoup de pluie */
+.BTF
+{
+  border: 1px solid #CCC;
+  background-color: #008;
+  color: #FFF;
+}
+
+/* Bleu pour prévisions pluie */
+.BC
+{
+  border: 1px solid #CCC;
+  background-color: #CEF;
+}
+
+/* Si neige */
+.NG
+{
+  border: 1px solid #CCC;
+  background-color: #FCF;
+}
+
+/* Orange vent */
+.VT
+{
+  border: 1px solid #CCC;
+  background-color: #FFB;
+}
+
+/* Orange foncé rafales */
+.VTR
+{
+  border: 1px solid #CCC;
+  background-color: #FD6;
+}
+
+#ButChoixEmplacementFermer
+{
+  height: 30px;
+  width: 100px;
+  border-radius: 10px;
+  background-color: #008;
+  font-size: 14px;
+  color: white;
+  text-align: center;
+}
+
+.itemEmplacement
+{
+  padding: 10px;
+}
+
+#ModalEmplacements
+{
+  position:fixed;
+  top: 25px;
+  left: 15%;
+  width:70%;
+  height:95%;
+  background:white;
+  color:black;
+  z-index:1000;
+  overflow-y:auto;
+  border:2px solid #000;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);;
+}
+
+.Legendes
+{
+  font-size: 1em;
+  font-weight: normal;
+}

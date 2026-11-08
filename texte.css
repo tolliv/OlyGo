@@ -1,0 +1,58 @@
+#BarreTexteHaut
+{
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  width: 100%;
+  height: 60px;
+  color: black;
+  background-color: #CCC;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.ClassButTexte
+{
+  width: 46px;
+  height: 46px;
+  border-radius: 23px;
+  background-size: 46px 46px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid #222;
+  border-shadow: none;
+}
+
+#ButTexteRetour
+{
+  background-image: url('imgGauche.png');
+}
+
+#ButTexteBegin
+{
+  background-image: url('imgHaut.png');
+}
+
+#ButTexteEnd
+{
+  background-image: url('imgBas.png');
+}
+
+#ButTexteEditer
+{
+  background-image: url('imgEditer.png');
+}
+
+#TxtFormated
+{
+  overflow-y: auto;
+  padding: 2px;
+  box-sizing: border-box;
+  margin-top: 65px;
+}

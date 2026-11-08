@@ -1,0 +1,262 @@
+/* Body */
+html, body
+{
+  overscroll-behavior-y: contain;
+}
+
+body
+{
+  overscroll-behavior-y: contain;
+  background-color: white;
+  font-family: sans-serif;
+  font-weight: normal;
+  font-stretch: normal;
+  font-size: 14px;
+  color-scheme: light;
+}
+
+/* Barre des boutons en haut */
+#BarreHomeHaut
+{
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  width: 100%;
+  height: 60px;
+  color: black;
+  background-color: #CCC;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+/* Boutons du menu */
+.ButMenu
+{
+  width: 46px;
+  height: 46px;
+  border-radius: 23px;
+  background-size: 46px 46px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: black;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid #222;
+  border-shadow: none;
+}
+
+#ButMenuParam
+{
+  background-image: url('imgParam.png');
+}
+
+#ButMenuMsg
+{
+  background-image: url('imgMsg.png');
+}
+
+#ButMenuRoute
+{
+  background-image: url('imgRoute.png');
+}
+
+#ButMenuMeteo
+{
+  background-image: url('imgMeteo.png');
+}
+
+#ButMenuReq
+{
+  // Pas d'image
+}
+
+#ButMenuAide
+{
+  background-color: #FFF;
+  color: blue;
+  font-size: 32px;
+  background-image: url('imgAide.png');
+}
+
+
+#ButEffacer
+{
+  height: 30px;
+  width: 80px;
+  margin-top: -5px;
+  margin-bottom: 2px;
+  border-radius: 10px;
+  background-color: #444;
+  color: white;
+  border: 1px solid #222;
+  border-shadow: none;
+}
+
+#TxtMessage
+{
+  width: 100%;
+  box-sizing: border-box;
+  font-family: sans-serif;
+  resize: none;
+}
+
+#ButActiviteDebut
+{
+  width: 90px;
+  padding: 10px;
+  margin: 5px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  display: inline-block;
+  background-color: #0F0;
+  color: black;
+  font-size: 14px;
+  border: 1px solid #222;
+  border-shadow: none;
+}
+
+#ButPosition
+{
+  width: 90px;
+  padding: 10px;
+  margin: 5px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  display: inline-block;
+  background-color: #008;
+  color: white;
+  font-size: 14px;
+  border: 1px solid #222;
+  border-shadow: none;
+}
+
+#ButHorsIti
+{
+  width: 90px;
+  padding: 10px;
+  margin: 5px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  display: inline-block;
+  background-color: #080;
+  color: white;
+  font-size: 14px;
+  border: 1px solid #222;
+  border-shadow: none;
+}
+
+#ButVariante
+{
+  width: 90px;
+  padding: 10px;
+  margin: 5px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  display: inline-block;
+  background-color: purple;
+  color: white;
+  font-size: 14px;
+  border: 1px solid #222;
+  border-shadow: none;
+}
+
+#ButBivouac
+{
+  width: 90px;
+  padding: 10px;
+  margin: 5px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  display: inline-block;
+  background: #83A;
+  color: white;
+  font-size: 14px;
+  border: 1px solid #222;
+  border-shadow: none;
+}
+
+#ButActiviteFin
+{
+  width:90px;
+  padding: 10px;
+  margin: 5px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  display: inline-block;
+  background-color: #F00;
+  color: white;
+  font-size: 14px;
+  border: 1px solid #222;
+  border-shadow: none;
+}
+
+#ButMemo
+{
+  width: 90px;
+  padding: 10px;
+  margin: 5px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  display: inline-block;
+  background-color: #FCC;
+  color: black;
+  font-size: 14px;
+  border: 1px solid #222;
+  border-shadow: none;
+}
+
+#scrHome
+{
+  display: block;
+}
+
+#scrParam
+{
+  display: none;
+}
+
+#scrMsg
+{
+  display: none;
+}
+
+#scrTrait
+{
+  display: none;
+}
+
+#scrTexte
+{
+  display: none;
+}
+
+.ZoneSaisie
+{
+  width: 100%;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+#DivVersionBarre
+{
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  width: 100%;
+  height: 18px;
+  text-align: center;
+  font-size: 0.9em;
+}
+#TxtVersionActuelle
+{
+  background-color: #FFF;
+  color: black;
+}
+#TxtVersionFuture
+{
+  background-color: #080;
+  color: white;
+}

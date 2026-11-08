@@ -1,0 +1,149 @@
+/*================================================================================================*/
+/* Partie Choix d'un emplacement                                                                  */
+/*================================================================================================*/
+
+#BarreChoixEmplacementHaut
+{
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  width: 100%;
+  height: 60px;
+  color: black;
+  background-color: #CCC;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+#ButChoixEmplacementRetour
+{
+  width: 46px;
+  height: 46px;
+  border-radius: 23px;
+  background-size: 46px 46px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  overflow: hidden;
+  cursor: pointer;
+  background-image: url('imgGauche.png');
+  border: 1px solid #222;
+  border-shadow: none;
+}
+
+#ButGestionEmplacements
+{
+  width: 46px;
+  height: 46px;
+  border-radius: 23px;
+  background-size: 46px 46px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: #EFE;
+  font-size: 11px;
+  border: 1px solid #222;
+  border-shadow: none;
+}
+
+
+/*==================================================================================================
+Partie Gestion des emplacements
+==================================================================================================*/
+#BarreGestionEmplacementsHaut
+{
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  width: 100%;
+  height: 60px;
+  color: black;
+  background-color: #CCC;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+#ButGestionEmplacementsRetour
+{
+  width: 46px;
+  height: 46px;
+  border-radius: 23px;
+  background-size: 46px 46px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  overflow: hidden;
+  cursor: pointer;
+  background-image: url('imgGauche.png');
+}
+
+.Emplacement
+{
+    padding: 8px;
+    border: 1px solid #CCC;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+.ButDelEmplacement
+{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 32px;
+  margin-left: 4px;
+  margin-bottom: 4px;
+  background: #333;
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+  border: 1px solid #000;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.ButAddEmplacement
+{
+  width: 15%;
+  height: 30px;
+  box-sizing: border-box;
+  display: inline-block;
+  background-color: #0F0;
+  font-size: 20px;
+  color: black;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.InputEmplacement
+{
+  box-sizing: border-box;
+  border-radius: 1px;
+  border: 1px solid #555;
+  font-size: 14px;
+  height: 25px;
+  color: blue;
+}
+#NewNom
+{
+  width: 30%;
+}
+#NewLat
+{
+  width: 18%;
+}
+#NewLon
+{
+  width: 18%;
+}
