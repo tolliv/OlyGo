@@ -1,0 +1,376 @@
+<!-- ?v=2611.03a -->
+<!-------------------------------------------------------
+ Programme GPX.Pos
+--------------------------------------------------------->
+
+<!----- HEADER ------------------------------------------->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <link rel="manifest" href="manifest.json?v=2611.03a">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png?v=2611.03a">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png?v=2611.03a">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=2611.03a">
+  <title>GPX.Pos</title>
+  <meta charset="UTF-8">
+</head>
+<body>
+
+<!----- ECRAN HOME ----->
+<link rel='stylesheet' type='text/css' href='home.css?v=2611.03a'>
+<div id='scrHome' style='display: none'>
+  <div id='BarreHomeHaut'>
+    &nbsp;&nbsp;
+    <button class='ButMenu' id='ButMenuParam'  onclick='ButMenuParamClicked()'></button>
+    &nbsp;
+    <button class='ButMenu' id='ButMenuMsg'    onclick='ButMenuMsgClicked()'></button>
+    &nbsp;
+    <button class='ButMenu' id='ButMenuRoute'  onclick='ButMenuRouteClicked()'></button>
+    &nbsp;
+    <button class='ButMenu' id='ButMenuMeteo'  onclick='ButMenuMeteoClicked()'></button>
+    &nbsp;
+    <button class='ButMenu' id='ButMenuReq'    onclick='ButMenuReqClicked()'>0 Req</button>
+    &nbsp;
+    <button class='ButMenu' id='ButMenuAide'   onclick='ButMenuAideClicked()'></button>
+    &nbsp;
+  </div>
+  <div style='height: 60px'></div>
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <b>Message à joindre :</b>
+    <button id="ButEffacer" onclick='butEffaceClicked()'>Effacer</button>
+  </div>
+  <textarea class='ZoneSaisie' id="TxtMessage" rows="6" style='resize: none;' placeholder="Entrez votre message..."></textarea>
+  <br>
+  <!-- Boutons page principale -->
+  <div style='padding-left: 10px; padding-top: 20px;'><b>Position envoyée sur GPX.Suivi</b></div>
+  <div id='DivDebut'>    <button id="ButActiviteDebut" onclick='butChoixClicked("BOUTON1")'>Début</button><span id='TxtButDebut'>Début de l'activité</span><br> </div>
+  <div id='DivPosition'> <button id="ButPosition" onclick='butChoixClicked("BOUTON2")'>Position</button><span id='TxtButPosition'>Position actuelle</span><br> </div>
+  <div id='DivBivouac'>  <button id="ButBivouac" onclick='butChoixClicked("BOUTON3")'>Bivouac</button><span id='TxtButBivouac'>Endroit du bivouac</span><br> </div>
+  <div id='DivFin'>      <button id="ButActiviteFin" onclick='butChoixClicked("BOUTON4")'>Fin</button><span id='TxtButFin'>Fin de l'activité</span><br> </div>
+  <div style='padding-left: 10px; padding-top: 20px;'><b>Mémorisation locale</b></div>
+  <div id='DivMemo'>     <button id="ButMemo" onclick='butChoixClicked("MEMO")'>Mémo</button><span id='TxtButMemo'>Mémorisation de texte</span><br> </div>
+
+  <br>
+  <div id='DivVersionBarre'>
+    <span id='TxtVersionActuelle'></span>
+    <span id='TxtVersionFuture'></span>
+  </div>
+</div>
+<script src="version.js?v=2611.03a"></script>
+<script src="home.js?v=2611.03a"></script>
+
+<!----- ECRAN PARAM ----->
+<link rel='stylesheet' type='text/css' href='param.css?v=2611.03a'>
+<div id='scrParam' style='display: none'>
+  <div id='BarreParamHaut'>
+    &nbsp;&nbsp;
+    <button class='ClassButParam' id='ButParamAnnuler' onclick='ButParamAnnulerClick()'></button>
+    &nbsp;
+    <button class='ClassButParam' id='ButParamValider' onclick='ButParamValiderClick()'></button>
+    &nbsp;&nbsp;PARAMETRES
+  </div>
+  <div style='height: 60px;'></div>
+
+  <!-- GPX.Pos -->
+  <div style='font-size: 1.2em;'><b>Paramètres Cloud</b></div>
+  Adresse URL
+    <input class='ZoneParamSaisie' type='text' id='TxtURL' placeholder="(https://...)"><br>
+    <div style='height: 5px;'></div>
+  Clé
+    <input class='ZoneParamSaisie' type='text' id='TxtKEY' placeholder="(sb_publishable...)"><br>
+    <div style='height: 5px;'></div>
+  Numéro utilisateur
+  <input class='ZoneParamSaisie' type='text' id='TxtUSER' placeholder="(6 chiffres)"><br>
+  <div style='height: 5px;'></div>
+  <button id="ButCopierID" onclick="ButCopierIDClick()" style='display: none;'>Copier</button>
+  <button id="ButTesterID" onclick="ButTesterIDClick()">Tester</button> <span id='txtResultatTestID'></span>
+  <br>
+  <br>
+
+  <!-- Géolocalisation -->
+  <div style='font-size: 1.2em;'><b>Paramètres de géolocalisation</b></div>
+  Seuil précision (m)
+  <input class='ZoneParamSaisie' type='text' id='TxtPrecision' value="15"><br>
+  <div style='height: 5px;'></div>
+
+  Temps maximal pour la géolocalisation (s)
+  <input class='ZoneParamSaisie' type='text' id='TxtTempsMaxLocalisation' value="30"><br>
+  <div style='height: 5px;'></div>
+
+  <div>
+    Simulation localisation<br>
+    <input type='checkbox' id='ChkSimulation'>
+    <input class='ZoneParamSaisie' type='text' id='TxtCoordonnees' value="48.85826187,2.29449563">
+  </div>
+  <br>
+
+  <!-- Météo -->
+  <div style='font-size: 1.2em;'><b>Paramètres pour la météo</b></div>
+  Seuil de vent (km/h)
+  <input class='ZoneParamSaisie' type='text' id='TxtSeuilVent' value="10"><br>
+  <div style='height: 5px;'></div>
+
+  <div>
+    Choix du modèle par défaut<br>
+    <div>
+      <input type="radio" id="RadArome"  name="modeleMeteo" value="AROME" checked>
+      <label for="RadArome">AROME France</label><br>
+
+      <input type="radio" id="RadArpege" name="modeleMeteo" value="ARPEGE">
+      <label for="RadArpege">ARPEGE Europe</label><br>
+
+      <input type="radio" id="RadIcon"   name="modeleMeteo" value="ICON">
+      <label for="RadIcon">ICON Europe</label><br>
+
+      <input type="radio" id="RadEcmwf"  name="modeleMeteo" value="ECMWF">
+      <label for="RadEcmwf">ECMWF IFS</label>
+    </div>
+  </div>
+  <div style='height: 5px;'></div>
+
+  Nombre de jours de prévision</b><br>
+  <input class='ZoneParamSaisie' type='text' id='TxtNbJours' value="4" placeholder="(1 à 15)"><br>
+  <br>
+
+  <!-- Personnalisation de l'affichage -->
+  <div style='font-size: 1.2em;'><b>Personnalisation de l'affichage</b></div>
+  Taille de la police
+  <input class='ZoneParamSaisie' type='text' id='TxtTaillePolice' value="14"><br>
+  <div style='height: 5px;'></div>
+
+  <!-- Informations -->
+  <br>
+  <div style='font-size: 1.2em;'><b>Informations système</b></div>
+  <div id="TxtVersion">Version de l'application</div>
+  <div id="TxtReseau">Accès réseau :</div>
+  <br>
+</div>
+
+<script src="param.js?v=2611.03a"></script>
+<script src="driverSupabase.js?v=2611.03a"></script>
+
+<!----- ECRAN TRAITEMENTS ----->
+<link rel='stylesheet' type='text/css' href='traitements.css?v=2611.03a'>
+<div id="scrTrait" style="display: none">
+  <div id='BarreTraitChoix'>
+    <div id='TxtTraitTitre'>---</div>
+  </div>
+
+  <div style='height: 80px;'>
+  </div>
+
+  <div id='DivLocalisation' style='height: 100px;'>
+    <span id='Step1' class=classDot></span>&nbsp;
+    <span id='TxtStep1' class=classText>Localisation</span><br>
+  </div>
+
+  <div id='DivMemorisation' style='height: 100px;'>
+    <span id='Step2' class=classDot></span>&nbsp;
+    <span id='TxtStep2' class=classText>Mémorisation</span><br>
+  </div>
+
+  <div id='DivEnvoi' style='height: 100px;'>
+    <span id='Step3' class=classDot></span>&nbsp;
+    <span id='TxtStep3' class=classText>Envoi</span><br>
+  </div>
+
+  <div id='DivBulletin' style='height: 100px;'>
+    <span id='Step4' class=classDot></span>&nbsp;
+    <span id='TxtStep4' class=classText>Bulletin météo</span><br>
+  </div>
+
+  <div class="button-with-multiline-text">
+    <button id="ButTraitRetour" onclick="ButTraitRetourClick()">Retour</button>
+  </div>
+  <br>
+  <div id='TxtTraitInfos'>
+  </div>
+</div>
+<script src="traitements.js?v=2611.03a"></script>
+<script src="geolocalisation.js?v=2611.03a"></script>
+
+<!----- ECRAN TEXTE ----->
+<link rel='stylesheet' type='text/css' href='texte.css?v=2611.03a'>
+<div id="scrTexte" style="display: none">
+  <div id='BarreTexteHaut'>
+    &nbsp;&nbsp;
+    <button class='ClassButTexte' id='ButTexteRetour' onclick='ButTexteRetourClick()'></button>
+    &nbsp;
+    <button class='ClassButTexte' id='ButTexteBegin' onclick='ButTexteBeginClick()'></button>
+    &nbsp;
+    <button class='ClassButTexte' id='ButTexteEnd' onclick='ButTexteEndClick()'></button>
+    &nbsp;
+    <button class='ClassButTexte' id='ButTexteEditer' onclick='AfficherEcranEdit()'></button>
+    &nbsp;&nbsp;
+    <span id=TxtTexteTitre>-</span>
+  </div>
+  <div id='TxtFormated'></div>
+</div>
+<script src="texte.js?v=2611.03a"></script>
+
+<!----- ECRAN EDITION ----->
+<link rel='stylesheet' type='text/css' href='edit.css?v=2611.03a'>
+<div id="scrEdit" style="display: none">
+  <div id='BarreEditHaut'>
+    &nbsp;&nbsp;
+    <button class='ClassButEdit' id='ButEditAnnuler' onclick='ButEditAnnulerClick()'></button>
+    &nbsp;
+    <button class='ClassButEdit' id='ButEditValider' onclick="ButEditValiderClick()"></button>
+    &nbsp;
+    <button class='ClassButEdit' id='ButEditBegin' onclick='ButEditBeginClick()'></button>
+    &nbsp;
+    <button class='ClassButEdit' id='ButEditEnd' onclick='ButEditEndClick()'></button>
+    &nbsp;&nbsp;
+    <span id=TxtEditTitre>-</span>
+  </div>
+  <textarea id='TxtEditInput' style='display: none;'></textarea>
+</div>
+<script src="edit.js?v=2611.03a"></script>
+
+<!----- ECRAN METEO ----->
+<link rel='stylesheet' type='text/css' href='meteo.css?v=2611.03a'>
+<div id="scrMeteo" style="display: none">
+  <div id='BarreMeteoHaut'>
+    <div id='BarreMeteoHautL1'>
+      &nbsp;&nbsp;
+      <button id='ButMeteoRetour' onclick='ButMeteoRetourClick()'></button>
+      &nbsp;&nbsp;
+      <button id='ButMeteoGPSNew' onclick='ButMeteoGPSNewClick()'></button>
+      &nbsp;&nbsp;
+      <button id='ButChoixEmplacement' onclick='ButChoixEmplacementClick()'>📍</button><br>
+      &nbsp;&nbsp;
+      <span id=TxtMeteoTitre>Météo</span>
+      &nbsp;&nbsp;
+    </div>
+    <div id='BarreMeteoHautL2'>
+      &nbsp;&nbsp;
+      <button class='BoutonModele' id='ButMeteoAROME'  onclick='ButMeteoAROMEClick()'>AROME</button>
+      <button class='BoutonModele' id='ButMeteoARPEGE' onclick='ButMeteoARPEGEClick()'>ARPEGE</button>
+      <button class='BoutonModele' id='ButMeteoICON'   onclick='ButMeteoICONClick()'>ICON</button>
+      <button class='BoutonModele' id='ButMeteoECMWF'  onclick='ButMeteoECMWFClick()'>ECMWF</button>
+      &nbsp;&nbsp;
+      <button class='BoutonHJ' id='BoutonHeures' onclick='ModeHeures()'>H</button>
+      <button class='BoutonHJ' id='BoutonJours'  onclick='ModeJours()'>J</button>
+    </div>
+  </div>
+  <div style='height: 90px;'></div>
+  <span id='TxtMeteoInfos'></span>
+  <span id='TxtMeteo'></span>
+  <span id='TxtResume'></span>
+  <br>
+</div>
+<script src="meteo.js?v=2611.03a"></script>
+
+<!----- ECRAN CHOIX DE L'EMPLACEMENT ----->
+<link rel='stylesheet' type='text/css' href='emplacements.css?v=2611.03a'>
+<div id="scrChoixEmplacement" style="display: none">
+  <div id='BarreChoixEmplacementHaut'>
+    &nbsp;&nbsp;
+    <button id='ButChoixEmplacementRetour' onclick='ButChoixEmplacementRetourClick()'></button>
+    &nbsp;&nbsp;
+    <button id='ButGestionEmplacements' onclick='AfficheEcranGestionEmplacements()'></button>
+    &nbsp;&nbsp;
+    <span id=TxtEmplacementsTitre>Choix d'un emplacement</span>
+  </div>
+  <div style='height: 60px;'></div>
+  <div id='DivChoixEmplacement'>
+  </div>
+  <br>
+</div>
+<script src="emplacements.js?v=2611.03a"></script>
+
+<!----- ECRAN GESTION EMPLACEMENTS ----->
+<link rel='stylesheet' type='text/css' href='emplacements.css?v=2611.03a'>
+<div id="scrGestionEmplacements" style="display: none">
+
+  <div id='BarreGestionEmplacementsHaut'>
+    &nbsp;&nbsp;
+    <button class='ClassButParam' id='ButParamAnnuler' onclick='ButGestionEmplacementsAnnulerClick()'></button>
+    &nbsp;
+    <button class='ClassButParam' id='ButParamValider' onclick='ButGestionEmplacementsValiderClick()'></button>
+    &nbsp;&nbsp;
+    <span id=TxtGestionEmplacementsTitre>Gestion des emplacements</span>
+  </div>
+
+  <div style='height: 60px;'></div>
+  <b>Liste des emplacements :</b>
+  <textarea class='ZoneSaisie' id="TxtEmplacements" rows=20 style='resize: none; font-family: monospace; margin-top: 5px;' placeholder="Paris : 48.8583, 2.2944"></textarea>
+  <br>
+  <br>
+  <b>Récupération de coordonnées d'un lieu :</b>
+  <div style="display: flex; gap: 5px; margin-top: 5px; align-items: center;">
+    <input type="text" id="InpGeoVille" placeholder="Ville (ex: Lyon)" style="flex: 2; height: 30px; padding: 0 5px;">
+
+    <select id="SelGeoPays" style="flex: 1; height: 34px;">
+      <option value="">Pays (Tous)</option>
+      <option value="FR" selected>France</option>
+      <option value="CH">Suisse</option>
+      <option value="BE">Belgique</option>
+      <option value="IT">Italie</option>
+      <option value="ES">Espagne</option>
+      <option value="DE">Allemagne</option>
+      <option value="GB">Royaume-Uni</option>
+    </select>
+
+    <button id="ButGeoChercher" onclick="GeocodingChercherVille()" style="height: 34px; padding: 0 10px;">OK</button>
+  </div>
+
+  <!-- Liste des résultats de recherche -->
+  <div id="DivGeoResultats" style="margin-top: 10px; max-height: 150px; overflow-y: auto; border: 1px solid #ccc; background: #f9f9f9; display: none;">
+    <ul id="UlGeoResultats" style="list-style: none; padding: 0; margin: 0; cursor: pointer;"></ul>
+  </div>
+  <br>
+</div>
+
+<!----- ECRAN REQUETES ----->
+<link rel='stylesheet' type='text/css' href='requetes.css?v=2611.03a'>
+<div id='scrReq' style='display: none'>
+  <div id='BarreReqHaut'>
+    &nbsp;&nbsp;
+    <button id='ButReqRetour' onclick='ButReqRetourClick()'></button>
+    &nbsp;&nbsp;
+    <span id=TxtTexteTitre>Requêtes mémorisées</span>
+  </div>
+  <div style='height: 60px;'></div>
+  <div>
+    <span id='TxtReqNb'>Nombre de requêtes en cours : <b></b></span>
+    <div id='DivRequetes'>
+      <br>
+      Pour envoyer les requêtes qui ont été mémorisées hors connexion réseau : <br>
+      <button id='ButEnvoiRequetes' onclick='ButEnvoiRequetesClicked()'>Envoyer</button>
+      <br>
+      <span id='TxtEnvoiRequetesStatut'></span>
+      <br>
+      <br>
+      <br>
+      Pour effacer définitivement les requêtes mémorisées sans les envoyer :<br>
+      <button id='ButClearRequetes' onclick='ButClearRequetesClicked()'>Effacer</button>
+    </div>
+  </div>
+</div>
+<script src="requetes.js?v=2611.03a"></script>
+
+<!----- ECRAN AIDE ----->
+<link rel='stylesheet' type='text/css' href='aide.css?v=2611.03a'>
+<div id='scrAide' style='display: none'>
+  <div id='BarreAideHaut'>
+    &nbsp;&nbsp;
+    <button id='ButAideRetour' onclick='ButAideRetourClick()'></button>
+    &nbsp;
+    <button class='ClassButEdit' id='ButAideHome' onclick='ButAideHomeClick()'></button>
+    &nbsp;
+    <button class='ClassButEdit' id='ButAidePlus' onclick='ButAidePlusClick()'></button>
+    &nbsp;
+    <button class='ClassButEdit' id='ButAideMoins' onclick='ButAideMoinsClick()'></button>
+    &nbsp;&nbsp;
+    <span id=TxtAideTitre>Aide</span>
+  </div>
+  <div>
+    <div id='TxtAide'></div>
+  </div>
+</div>
+<script src="aide.js?v=2611.03a"></script>
+
+</body>
+</html>
