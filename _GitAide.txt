@@ -1,6 +1,6 @@
-Création nouveau projet sur Github
+CrÃ©ation nouveau projet sur Github
 ----------------------------------
-- Sur Github, créer le projet.
+- Sur Github, crÃ©er le projet.
 - Dans Code, on voit le nom du chemin .git
 
 
@@ -9,7 +9,7 @@ Sur PC
 git init
 git add index.html
 git branch -M main
-git remote add origin https://github.com/tolliv/visugpx.pos.git
+git remote add origin https://github.com/tolliv/OlyGo.git
 git push -u origin main
 
 
@@ -17,7 +17,7 @@ Sur android Studio
 ------------------
 .\_Git.bat
 
-Exemple de batch _Git.bat à mettre dans le répertoire :
+Exemple de batch _Git.bat Ã  mettre dans le rÃ©pertoire :
 @echo off
 set msg=Auto-update %date% %time%
 c:\git\bin\git status
@@ -28,9 +28,9 @@ echo Mise a jour envoyee avec le message : %msg%
 
 
 
-Création des pages sur Github
+Crï¿½ation des pages sur Github
 -----------------------------
-Pour avoir un serveur de site web (nécessaire pour une PWA)
+Pour avoir un serveur de site web (nÃ©cessaire pour une PWA)
 - Dans Setting\Pages, deploy en choisissant la branch main, puis save
 - Rafraichir la page, en haut on doit avoir au bout d'un certain temps "Your site is live at .."
 
