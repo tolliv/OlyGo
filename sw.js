@@ -1,4 +1,3 @@
-// v=2611.09a
 importScripts('version.js');
 const CACHE_NAME = 'OlyGo'+VERSION;
 const ASSETS = [
