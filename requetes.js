@@ -56,9 +56,7 @@ async function MiseAjourConsultations()
     {
       const lDateAbsolue = lRet.data[n].date;
       const lDateRelative = FormaterDateRelative(Number(lDateAbsolue), 'partial');
-      lListe += "<b>" + lDateRelative.j + " à " + lDateRelative.h + ":</b> ";
-      lListe += "localisée à " + lRet.data[n].msg;
-      lListe += "<br>";
+      lListe += lDateRelative.j + " à " + lDateRelative.h +"<br>";
     }
     pid('lstConsultations').innerHTML = lListe;
   }
