@@ -5,8 +5,9 @@
 //-------------------------------------------------------
 // Afficher l'écran scrReq
 //-------------------------------------------------------
-function AfficherEcranREQ()
+async function AfficherEcranREQ()
 {
+  //----- Partie requêtes -----
   // Compte le nombre de requêtes mémorisées
   let lNbReq = CountFIFO();
 
@@ -29,7 +30,38 @@ function AfficherEcranREQ()
   }
 
   pid('TxtEnvoiRequetesStatut').innerHTML = "";
+
+  //----- Partie consultations -----
+  if (IsConnected())
+    MiseAjourConsultations();
+
   pid('scrReq').style.display = 'block';
+}
+
+//--------------------------------------------------------------------------------------------------
+// Mise à jour des consultations
+//--------------------------------------------------------------------------------------------------
+async function MiseAjourConsultations()
+{
+  // Liste des consultations
+  const lCmdRead = "user=eq." + USER
+                 + "&type=eq.200"
+                 + "&order=date.desc"
+                 + "&limit=20"
+  const lRet = await SupabaseRead(lCmdRead);
+  if (lRet.status == "OK")
+  {
+    let lListe = "";
+    for (let n = 0; n < lRet.length; n++)
+    {
+      const lDateAbsolue = lRet.data[n].date;
+      const lDateRelative = FormaterDateRelative(Number(lDateAbsolue), 'partial');
+      lListe += "<b>" + lDateRelative.j + " à " + lDateRelative.h + ":</b> ";
+      lListe += "localisée à " + lRet.data[n].msg;
+      lListe += "<br>";
+    }
+    pid('lstConsultations').innerHTML = lListe;
+  }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -172,6 +204,9 @@ async function EnvoiRequetesFIFO()
 
                 pid("Step4").style.backgroundColor = ColOK;
                 pid('TxtStep4').innerHTML += "Chargé";
+
+                // Récupère les consultations
+                MiseAjourConsultations();
             }
 
             // Au moins une erreur, les requêtes non envoyées n'ont pas été effacées

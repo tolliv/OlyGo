@@ -60,3 +60,16 @@
   border: 1px solid #222;
   border-shadow: none;
 }
+
+#lstConsultations
+{
+  margin-top: 5px;
+  height: 25vh;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  overflow-y: auto;
+  padding: 8px;
+  font-size: 0.8em !important;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}

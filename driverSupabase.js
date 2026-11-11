@@ -33,7 +33,7 @@ function DateSupabase()
 //--------------------------------------------------------------------------------------------------
 // Formate une chaîne de date
 // Aujourd'hui, Hier, ou Date complète
-// On peut forcer à Date complète avec le paramètre mode = 'complete'
+// mode = 'partial' ou 'complete'
 //--------------------------------------------------------------------------------------------------
 function FormaterDateRelative(dateStr, mode)
 {
