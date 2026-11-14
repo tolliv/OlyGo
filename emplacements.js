@@ -5,11 +5,11 @@
 //-------------------------------------------------------
 // Affiche l'écran pour le choix de l'emplacement
 //-------------------------------------------------------
-function AfficheEcranChoixEmplacement()
+async function AfficheEcranChoixEmplacement()
 {
   pid('scrMeteo').style.display = 'none';
   pid('scrHome').style.display = 'none';
-  GestionDatabaseEmplacements();                        // Vérifie si pas plus récent sur la database
+  await GestionDatabaseEmplacements();                 // Vérifie si pas plus récent sur la database
   CreeListeEmplacements();
   pid('DivChoixEmplacement').innerHTML = HTMLJ;
   pid('scrChoixEmplacement').style.display = 'block';
