@@ -7,7 +7,8 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <link rel="manifest" href="manifest.json">
+<!--  <link rel="manifest" href="manifest.json"> -->
+  <link rel="manifest" href="manifest.json" crossorigin="use-credentials">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -42,7 +43,7 @@
   <textarea class='ZoneSaisie' id="TxtMessage" rows="6" style='resize: none;' placeholder="Entrez votre message..."></textarea>
   <br>
   <!-- Boutons page principale -->
-  <div style='padding-left: 10px; padding-top: 20px;'><b>Position envoyée sur GPX.Suivi</b></div>
+  <div style='padding-left: 10px; padding-top: 20px;'><b>Position envoyée sur OlySee</b></div>
   <div id='DivDebut'>    <button id="ButActiviteDebut" onclick='butChoixClicked("BOUTON1")'>Début</button><span id='TxtButDebut'>Début de l'activité</span><br> </div>
   <div id='DivPosition'> <button id="ButPosition" onclick='butChoixClicked("BOUTON2")'>Position</button><span id='TxtButPosition'>Position actuelle</span><br> </div>
   <div id='DivBivouac'>  <button id="ButBivouac" onclick='butChoixClicked("BOUTON3")'>Bivouac</button><span id='TxtButBivouac'>Endroit du bivouac</span><br> </div>

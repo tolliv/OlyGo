@@ -9,6 +9,7 @@ function AfficheEcranChoixEmplacement()
 {
   pid('scrMeteo').style.display = 'none';
   pid('scrHome').style.display = 'none';
+  GestionDatabaseEmplacements();                        // Vérifie si pas plus récent sur la database
   CreeListeEmplacements();
   pid('DivChoixEmplacement').innerHTML = HTMLJ;
   pid('scrChoixEmplacement').style.display = 'block';
@@ -52,7 +53,7 @@ function SelectionnerEmplacement(nom, lat, lon)
 function CreeListeEmplacements(choix)
 {
   // Récupération de la liste stockée
-  let lListeEmplacementsJSON = localStorage.getItem("ListeEmplacements");
+  let lListeEmplacementsJSON = localStorage.getItem("EmplacementsListe");
   let lListeEmplacements = [];
 
   // Si elle existe, conversion en tableau
@@ -119,7 +120,7 @@ function CreeTexteEmplacements()
   let lTXT = "";
 
   // Récupération de la liste stockée
-  let lListeEmplacementsJSON = localStorage.getItem("ListeEmplacements");
+  let lListeEmplacementsJSON = localStorage.getItem("EmplacementsListe");
   let lListeEmplacements = [];
 
   // Si elle existe, conversion en tableau
@@ -196,8 +197,16 @@ function AnalyseTexteVersTableau()
 //-------------------------------------------------------
 function ButGestionEmplacementsValiderClick()
 {
-  let nouvelleListe = AnalyseTexteVersTableau();
-  localStorage.setItem("ListeEmplacements", JSON.stringify(nouvelleListe));
+  const nouvelleListe = AnalyseTexteVersTableau();
+  const lListeEmplacementsJSON = JSON.stringify(nouvelleListe);
+
+  // Sauvegarde emplacements et de la date
+  localStorage.setItem("EmplacementsListe", lListeEmplacementsJSON);
+  const lDateLocale = DateSupabase();
+  localStorage.setItem("EmplacementsDate", lDateLocale);
+  GestionDatabaseEmplacements();
+
+  // Affichage de la liste
   pid('scrGestionEmplacements').style.display = 'none';
   AfficheEcranChoixEmplacement();
 }

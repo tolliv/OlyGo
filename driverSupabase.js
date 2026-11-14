@@ -393,6 +393,7 @@ async function decodeSupabaseConfig(encodedStr) {
 
 //--------------------------------------------------------------------------------------------------
 // Envoie un nouveau point dans la base de données
+// renvoie "OK" ou "Erreur .."
 //--------------------------------------------------------------------------------------------------
 async function SupabaseWrite(data)
 {
@@ -425,7 +426,7 @@ async function SupabaseWrite(data)
 
 //--------------------------------------------------------------------------------------------------
 // Lit un nombre de points dans la base de données
-// En partant de la fin
+// Renvoie { status, length, data }
 //--------------------------------------------------------------------------------------------------
 async function SupabaseRead(pCmd)
 {

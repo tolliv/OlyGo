@@ -1,5 +1,6 @@
 //=======================================================
 // CODE Pour écran REQUETES
+// Tout ce qui est lié à database
 //=======================================================
 
 //-------------------------------------------------------
@@ -359,4 +360,97 @@ async function EnvoiSingleRequete(nouveauPoint)
   // Ecriture
   const lStatus = await SupabaseWrite(nouveauPoint);
   return(lStatus);
+}
+
+
+//--------------------------------------------------------------------------------------------------
+// Gestion du Download/Upload des emplacements météo (type 201)
+//--------------------------------------------------------------------------------------------------
+async function GestionDatabaseEmplacements()
+{
+  const lType = "201";
+  const lNomStorage = "Emplacements";
+
+  let lConnecte = IsConnected();
+
+  // Si connecté
+  if (lConnecte)
+  {
+    // Lecture date actuelle du fichier
+    // Si elle n'existe pas, on la crée
+    let lDateLocale = localStorage.getItem(lNomStorage + "Date");
+    if (!lDateLocale)
+    {
+      lDateLocale = 0;
+    }
+
+    // Date la plus récente de la database
+    let lCmd;
+    let lRetRead;
+    lCmd = "user=eq." + USER
+         + "&type=eq." + lType
+         + "&order=date.desc"
+         + "&limit=1";
+    lRetRead = await SupabaseRead(lCmd);
+
+    // -1: erreur base   (valeur par défaut
+    // 0: pas de valeur
+    // sinon date existante
+    let lDateBase = -1;
+
+    // Lecture OK
+    if (lRetRead.status == "OK")
+    {
+      // S'il y a une valeur
+      if (lRetRead.length > 0)
+        lDateBase = lRetRead.data[0].date;
+
+      // Pas de valeur dans la base, on met nulle car c'est la plus ancienne
+      else
+        lDateBase = 0;
+    }
+
+    // Erreur de lecture TODO
+    else
+    {
+    }
+
+    //----- Traitement -----
+
+    // Doit être écrit : Local -> Database
+    if (lDateLocale > lDateBase)
+    {
+      console.log("Date locale (" + lDateLocale + ") > date base (" + lDateBase + ")");
+      const lListeEmplacementsJSON = localStorage.getItem(lNomStorage + "Liste") ?? ""; // Coalescence
+      const nouveauFichier =
+      {
+          date: lDateLocale,
+          user: USER,
+          type: lType,
+          msg: lListeEmplacementsJSON
+      };
+      const lRetWrite = await SupabaseWrite(nouveauFichier);
+      console.log("Ecriture OK : " + lRetWrite);
+    }
+
+    // Doit être lu : Database ->  Local
+    else if (lDateLocale < lDateBase)
+    {
+      console.log("Date locale (" + lDateLocale + ") < date base (" + lDateBase + ")");
+      const lListeEmplacementsJSON = lRetRead.data[0].msg;
+      localStorage.setItem(lNomStorage + "Liste", lListeEmplacementsJSON);
+      localStorage.setItem(lNomStorage + "Date", lDateBase);
+      console.log("Lecture OK");
+    }
+
+    // Même date, on ne fait rien
+    else
+    {
+      console.log("Date locale (" + lDateLocale + ") = date base (" + lDateBase + ")");
+    }
+  }
+
+  // Pas connecté
+  else
+  {}
 }

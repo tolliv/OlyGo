@@ -47,11 +47,11 @@ if ('serviceWorker' in navigator)
 }
 
 //----- Gestionnaires d'événements DOM -----
-document.addEventListener('DOMContentLoaded', function()
+document.addEventListener('DOMContentLoaded', async function()
 {
    //----- Ecran HOME -----
   // Lit les paramètres dans le local storage
-  LitParametres();
+  await LitParametres();
 
   // Fin de l'initialisation et affichage version
   sPlateforme = getPlatform();
@@ -65,6 +65,9 @@ document.addEventListener('DOMContentLoaded', function()
 
   // Affichage de l'écran HOME
   AfficherEcranHOME();
+
+  // Gestion Upload/Download des fichiers communs
+  GestionDatabaseEmplacements();
 
 //  ButMenuParamClicked(); // Mode DEBUG : Actions automatiques (commenter si RELEASE)
 });
