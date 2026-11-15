@@ -19,7 +19,8 @@ async function AfficherEcranTEXTE(pChoix)
 
   if (pChoix == 1)
   {
-    lTexte= localStorage.getItem('TxtRoute');
+    await GestionDatabaseRoute();
+    lTexte= localStorage.getItem('RouteListe');
     pid('TxtTexteTitre').innerHTML = "ROUTE";
     lScrollPosition = localStorage.getItem('ScrollTxtRoute');
     if (lScrollPosition == null)
@@ -27,7 +28,8 @@ async function AfficherEcranTEXTE(pChoix)
   }
   else if (pChoix == 2)
   {
-    lTexte= localStorage.getItem('TxtMessages');
+    await GestionDatabaseMessages();
+    lTexte= localStorage.getItem('MessagesListe');
     pid('TxtTexteTitre').innerHTML = "MSG";
     lScrollPosition = localStorage.getItem('ScrollTxtMsg');
     if (lScrollPosition == null)
@@ -46,7 +48,8 @@ async function AfficherEcranTEXTE(pChoix)
   // Laisse le temps à l'affichage de se faire, PUIS restaure la position de défilement
   setTimeout(function()
   {
-    window.scrollTo({
+    window.scrollTo(
+    {
       top: lScrollPosition,
       behavior: 'smooth' // 'auto' est instantané, 'smooth' est animé
     });
@@ -144,11 +147,13 @@ function ButTexteEndClick()
 // Saut de ligne = '\n'
 // TODO n'autoriser qu'un seul \n à la fin
 //-------------------------------------------------------
-function AjouterLigne(pNouvellesLignes)
+async function AjouterLigne(pNouvellesLignes)
 {
   let lTexte = localStorage.getItem('TxtMessages');
   if (lTexte == null)
     lTexte = "";
   lTexte += pNouvellesLignes;
-  localStorage.setItem('TxtMessages', lTexte);
+  localStorage.setItem('MessagesListe', lTexte);
+  localStorage.setItem('MessagesDate', DateSupabase());
+  await GestionDatabaseMessages();
 }

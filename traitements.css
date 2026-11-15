@@ -40,19 +40,37 @@
 {
   width: 100%;
   text-align: center;
+  align-items: center;
 }
 
 #ButTraitRetour
 {
+  display: block;
   width: 150px;
   padding: 10px;
-  margin: 5px;
+  margin: auto;
   box-sizing: border-box;
   border-radius: 20px;
-  display: inline-block;
-  background-color: #800;
+  background-color: #444;
   font-size: 14px;
   color: white;
-  border: 1px solid #222;
+  border: 2px solid #444;
   border-shadow: none;
+  cursor: pointer;
+}
+
+#ButOuvrirOlySee
+{
+  display: none;
+  width: 200px;
+  padding: 10px;
+  margin: auto;
+  box-sizing: border-box;
+  border-radius: 20px;
+  background-color: #444;
+  font-size: 14px;
+  color: white;
+  border: 2px solid #444;
+  border-shadow: none;
+  cursor: pointer;
 }

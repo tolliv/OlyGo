@@ -185,7 +185,6 @@ async function SupabaseReadPrenom()
 {
   var lRet;
   var lCmd;
-  var retStatus;
 
   // Lecture 1000
   lCmd = "user=eq." + USER
@@ -395,13 +394,39 @@ async function decodeSupabaseConfig(encodedStr) {
 // Envoie un nouveau point dans la base de données
 // renvoie "OK" ou "Erreur .."
 //--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+// Envoie un nouveau point dans la base de données
+// renvoie "OK" ou "Erreur .."
+//--------------------------------------------------------------------------------------------------
 async function SupabaseWrite(data)
 {
+  let lErreurTimeout = false;
+  const controller = new AbortController();
+  const signal = controller.signal;
+
+  // 1. Délai pour afficher le message "Travail en cours" (1 seconde)
+  const dialogId = setTimeout(() =>
+  {
+    pid('status-card').style.border = '5px solid #FFF';
+    pid('panStatusIcon').style.display = 'block';
+    pid('panStatusText').innerHTML = "Accès réseau en cours..";
+    pid('panStatus').style.display = 'flex';
+  }, 1000);
+
+  // 2. Délai pour annuler la requête (5 secondes)
+  const timeoutId = setTimeout(() =>
+  {
+    controller.abort();
+    console.log("SupabaseWrite : Délai dépassé (5s)");
+    lErreurTimeout = true;
+  }, 5000);
+
   try
   {
     const response = await fetch(API_URL,
     {
       method: 'POST',
+      signal: signal,
       headers: {
         'apikey': API_KEY,
         'Authorization': `Bearer ${API_KEY}`,
@@ -414,30 +439,78 @@ async function SupabaseWrite(data)
     if (!response.ok)
     {
       const error = await response.json();
-      return("Erreur SupabaseSendPoint : " + error.message);
+      return("Erreur SupabaseWrite : " + error.message);
     }
-   return("OK");
+    return("OK");
   }
   catch (error)
   {
-    return("Erreur SupabaseSendPoint : " + error);
+    // Si l'erreur vient de l'annulation (AbortController)
+    if (error.name === 'AbortError')
+      return "Erreur TIMEOUT";
+
+    // Si c'est une autre erreur
+    return "Erreur SupabaseWrite : " + error;
+  }
+  finally
+  {
+    // Nettoyage des timers
+    clearTimeout(dialogId);
+    clearTimeout(timeoutId);
+
+    // Gestion de l'affichage final
+    if (lErreurTimeout)
+    {
+      pid('panStatusIcon').style.display = 'none';
+      pid('status-card').style.border = '5px solid #F00';
+      pid('panStatusText').innerHTML = "Accès à la base de donnée impossible.<br>Passez en mode avion<br>ou réessayez plus tard !";
+      setTimeout(() =>
+      {
+        pid('panStatus').style.display = 'none';
+      }, 5000);
+    }
+    else
+    {
+      pid('panStatus').style.display = 'none';
+    }
   }
 }
 
 //--------------------------------------------------------------------------------------------------
-// Lit un nombre de points dans la base de données
+// Fonction bas niveau qui lit dans la base de données en fonction de pCmd
 // Renvoie { status, length, data }
 //--------------------------------------------------------------------------------------------------
 async function SupabaseRead(pCmd)
 {
+  let lErreurTimeout = false;
+  const controller = new AbortController();
+  const signal = controller.signal;
+
+  // 1. Délai pour afficher le message "Travail en cours" (1 seconde)
+  const dialogId = setTimeout(() =>
+  {
+    pid('status-card').style.border = 'border: 5px solid #FFF';
+    pid('panStatusIcon').style.display = 'block';
+    pid('panStatusText').innerHTML = "Accès réseau en cours..";
+    pid('panStatus').style.display = 'flex';
+  }, 1000);
+
+  // 2. Délai pour annuler la requête (5 secondes)
+  const timeoutId = setTimeout(() =>
+  {
+    controller.abort();
+    console.log("SupabaseRead : Délai dépassé (5s)");
+    lErreurTimeout = true;
+  }, 5000);
+
   try
   {
     const url = API_URL + "?" + pCmd;
     const response = await fetch(url,
     {
       method: 'GET',
-      headers:
-      {
+      signal: signal, // On passe le signal à fetch
+      headers: {
         'apikey': API_KEY,
         'Authorization': `Bearer ${API_KEY}`,
         'Content-Type': 'application/json'
@@ -447,21 +520,50 @@ async function SupabaseRead(pCmd)
     if (!response.ok)
     {
       const error = await response.json();
-      return {status:"Erreur SupabaseRead : " + error.message, length:0, data:null};
+      return { status: "Erreur SupabaseRead : " + error.message, length: 0, data: null };
     }
 
     const lData = await response.json();
     if (lData && lData.length == 0)
-      return {status:"OK", length:0, data:null};
+      return { status: "OK", length: 0, data: null };
 
     if (lData && lData.length > 0)
-    {
-      return {status:"OK", length:lData.length , data:lData};
-    }
+      return { status: "OK", length: lData.length, data: lData };
   }
   catch (error)
   {
-      return {status:"Erreur SupabaseRead", length:0, data:null};
+    // Si l'erreur vient de l'annulation (AbortController)
+    if (error.name === 'AbortError')
+      return { status: "Erreur TIMEOUT", length: 0, data: null };
+
+    // Si c'est une autre erreur
+    else
+      return { status: "Erreur SupabaseRead", length: 0, data: null };
+
+  }
+  finally
+  {
+    // Nettoyage des timers et de l'affichage
+    clearTimeout(dialogId);
+    clearTimeout(timeoutId);
+
+    // En cas d'erreur de timeout, on affiche un message d'erreur puis on ferme le pannel
+    if (lErreurTimeout)
+    {
+      pid('panStatusIcon').style.display = 'none';
+      pid('status-card').style.border = '5px solid #F00';
+      pid('panStatusText').innerHTML = "Accès à la base de donnée impossible.<br>Passez en mode avion<br>ou reéssayez plus tard !";
+      const dialogId = setTimeout(() =>
+      {
+        pid('panStatus').style.display = 'none';
+      }, 5000);
+    }
+
+    // Si c'est une autre erreur TODO
+    else
+    {
+        pid('panStatus').style.display = 'none';
+    }
   }
 }
 

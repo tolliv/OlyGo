@@ -21,6 +21,7 @@ async function Localisation(pChoix, choixBouton)
   // Par défaut, non affichés
   pid('DivEnvoi').style.display = 'none';
   pid('DivBulletin').style.display = 'none';
+  pid('ButOuvrirOlySee').style.display = 'none';
 
   // Réinitialisation des couleurs et des champs
   pid('Step1').style.backgroundColor = ColInactif;
@@ -36,7 +37,7 @@ async function Localisation(pChoix, choixBouton)
     pid('Step3').style.backgroundColor = ColInactif;
     pid('TxtStep3').innerHTML = "<b>Envoi</b><br>";
     pid('Step4').style.backgroundColor = ColInactif;
-    pid('TxtStep4').innerHTML = "<b>Bulletin météo</b><br>";
+    pid('TxtStep4').innerHTML = "<b>Bulletin météo et Consultations</b><br>";
   }
 
   // Couleur et texte barre de choix
@@ -46,7 +47,6 @@ async function Localisation(pChoix, choixBouton)
 
   // Bouton annuler au début
   pid('ButTraitRetour').innerHTML = "Annuler";
-  pid('ButTraitRetour').style.backgroundColor = '#800';
   gDemandeAnnulation = false;
 
   // Affiche l'écran Traitement
@@ -125,7 +125,6 @@ async function Localisation(pChoix, choixBouton)
 
     // Maintenant, on ne peut plus annuler
     pid('ButTraitRetour').innerHTML = "Retour";
-    pid('ButTraitRetour').style.backgroundColor = '#008';
   }
 
   //========== Actions après localisation ==========
@@ -167,7 +166,7 @@ async function Localisation(pChoix, choixBouton)
       lLigne3 += "\n";
 
     const lNouveauMessage = lLigne1 + lLigne2 + lLigne3;
-    AjouterLigne(lNouveauMessage);    // Message mémorisé dans MSG
+    await AjouterLigne(lNouveauMessage);    // Message mémorisé dans MSG
     pid("TxtStep2").innerHTML += "Message mémorisé<br>";
 
     //----- Mémorisation requête dans buffer d'envoi -----
@@ -233,3 +232,21 @@ function ButTraitRetourClick()
   AfficherEcranHOME();
 }
 
+//--------------------------------------------------------------------------------------------------
+// Ouvrir OlySee
+//--------------------------------------------------------------------------------------------------
+async function ButOuvrirOlySeeClick()
+{
+  BoutonEtat('ButOuvrirOlySee', 'actif');
+  const lLien = CreeLienOlySee();
+
+  // Ouvre le lien dans un nouvel onglet
+  if (lLien)
+  {
+    window.open(lLien, '_blank');
+  }
+
+  await sleep(300);
+  BoutonEtat('ButOuvrirOlySee', 'inactif');
+
+}

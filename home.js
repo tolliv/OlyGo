@@ -1,8 +1,5 @@
-/* Liste de TODO
-  - fermeture automatique après traitement + bip
-*/
-
 //----- CODE ---------------------------------------------------------------------------------------
+
 //----- Variables -----
 let sPlateforme = "Unknown";
 let iSeuilPrecision;                  // Paramètre mémorisé
@@ -57,8 +54,8 @@ document.addEventListener('DOMContentLoaded', async function()
   sPlateforme = getPlatform();
 
   // Dans écran PARAM
-  pid('TxtVersion').innerHTML = "Version de l'application : <b>v" + VERSION + "</b><br>";
-  pid('TxtVersion').innerHTML+= "Plateforme  : <b>" + sPlateforme + "</b>";
+  pid('TxtVersion').innerHTML = "Version de l'application : <b>v" + VERSION + "</b>";
+  pid('TxtPlateforme').innerHTML= "Plateforme  : <b>" + sPlateforme + "</b>";
 
   // Dans écran HOME
   pid('TxtVersionActuelle').innerHTML = "Version " + VERSION;
@@ -66,10 +63,14 @@ document.addEventListener('DOMContentLoaded', async function()
   // Affichage de l'écran HOME
   AfficherEcranHOME();
 
-  // Gestion Upload/Download des fichiers communs
-  GestionDatabaseEmplacements();
+  // Gestion Upload/Download des fichiers communs (fonctions bloquantes au démarrage) TODO
+  await GestionDatabaseEmplacements();
+  await GestionDatabaseMessages();
+  await GestionDatabaseRoute();
 
-//  ButMenuParamClicked(); // Mode DEBUG : Actions automatiques (commenter si RELEASE)
+  // pid('scrHome').style.display = 'none';
+  // pid('scrTrait').style.display = 'block';
+  // pid('ButOuvrirOlySee').style.display = 'block';
 });
 
 //--------------------------------------------------------------------------------------------------
@@ -172,7 +173,7 @@ function ButMenuParamClicked()
   AfficherEcranPARAM();
 }
 
-function ButMenuMsgClicked()
+async function ButMenuMsgClicked()
 {
   pid('scrHome').style.display = 'none';
   AfficherEcranTEXTE(2);
@@ -208,14 +209,10 @@ function ButMenuAideClicked()
 //--------------------------------------------------------------------------------------------------
 async function butEffaceClicked()
 {
-  pid('ButEffacer').innerHTML = "Effacé";
-  pid('ButEffacer').style.background = "#0F0";
-  pid('ButEffacer').style.color = "#000";
+  BoutonEtat('ButEffacer', 'actif');
   pid('TxtMessage').value = "";
-  await new Promise(resolve => setTimeout(resolve, 500));
-  pid('ButEffacer').innerHTML = "Effacer";
-  pid('ButEffacer').style.background = "#008";
-  pid('ButEffacer').style.color = "#FFF";
+  await sleep(300);
+  BoutonEtat('ButEffacer', 'inactif');
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -227,6 +224,30 @@ function IsConnected()
 //  lConnected = false;     // Mode DEBUG : simulation pas de réseau (commenter si RELEASE)
   return(lConnected);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Activation/Désactivation d'un bouton
+//--------------------------------------------------------------------------------------------------
+function BoutonEtat(bouton, etat)
+{
+  const but = pid(bouton);
+  if (etat == 'actif')
+  {
+    but.style.backgroundColor = '#FC8';
+    but.style.color = '#000';
+    but.style.border = '2px solid #DA6';
+    but.state = 'actif';
+  }
+
+  if (etat == 'inactif')
+  {
+    but.style.backgroundColor = '#444';
+    but.style.color = '#FFF';
+    but.style.border = '2px solid #444';
+    but.state = 'inactif';
+  }
+}
+
 
 //--------------------------------------------------------------------------------------------------
 // Test SMS

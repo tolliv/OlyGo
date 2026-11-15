@@ -16,12 +16,12 @@ function AfficherEcranEdit()
   pid('scrTexte').style.display = 'none';
   if (gParent == 1)
   {
-    lTxtInput = localStorage.getItem('TxtRoute');
+    lTxtInput = localStorage.getItem('RouteListe');
     pid('TxtEditTitre').innerHTML = "Edition ROUTE";
   }
   else if (gParent == 2)
   {
-    lTxtInput= localStorage.getItem('TxtMessages');
+    lTxtInput= localStorage.getItem('MessagesListe');
     pid('TxtEditTitre').innerHTML = "Edition MSG";
   }
 
@@ -54,7 +54,6 @@ function RevientEcranParent()
   AfficherEcranTEXTE(gParent);
 }
 
-
 //-------------------------------------------------------
 // Annulation des modifications
 // Et revient à l'écran parent
@@ -64,23 +63,27 @@ function ButEditAnnulerClick()
   RevientEcranParent();
 }
 
-
 //-------------------------------------------------------
 // Validation des modifications
-// Et revient à l'écran parent
+// Et revient à l'écran parent qui va gérer la database
 //-------------------------------------------------------
-function ButEditValiderClick()
+async function ButEditValiderClick()
 {
   let lTxtInput = pid('TxtEditInput').value;
   if (lTxtInput == null)
     lTxtInput = "";
 
   if (gParent == 1)
-    localStorage.setItem('TxtRoute', lTxtInput);
+  {
+    localStorage.setItem('RouteListe', lTxtInput);
+    localStorage.setItem('RouteDate', DateSupabase());
+  }
 
   else if (gParent == 2)
-    localStorage.setItem('TxtMessages', lTxtInput);
-
+  {
+    localStorage.setItem('MessagesListe', lTxtInput);
+    localStorage.setItem('MessagesDate', DateSupabase());
+  }
   RevientEcranParent();
 }
 

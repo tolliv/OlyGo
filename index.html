@@ -72,73 +72,66 @@
   </div>
   <div style='height: 60px;'></div>
 
-  <!-- OlyGo -->
+  <!-- Cloud -->
   <div style='font-size: 1.2em;'><b>Paramètres Cloud</b></div>
   ID
   <textarea type='texte' id='TxtID'></textarea><br>
   <div style='height: 5px;'></div>
-  <button id="ButCopierID" onclick="ButCopierIDClick()" style='display: in-line;'>Copier</button>
+  <button id="ButCopierID" onclick="ButCopierIDClick()" style='display: in-line;'>Copier</button><br>
+  <div style='height: 5px;'></div>
   <button id="ButTesterID" onclick="ButTesterIDClick()">Tester</button> <span id='txtResultatTestID'></span>
-  <br>
-  <br>
+  <div style='height: 5px;'></div>
+  <button id="ButOuvrirOlySeeDepuisParam" onclick="ButOuvrirOlySeeDepuisParamClick()">OlySee</button>
+  <div style='height: 10px;'></div>
+
+  &nbsp;Synchronisation automatique <input type='checkbox' id='ChkSynchronisation' checked><br>
+  &nbsp;<small><i>Concerne MSG, ROUTE et les Emplacements météo</i></small>
+  <!----------------- Séparateur ------------------------------------------------->
+  <div style='height: 14px; border-bottom: 1px solid #CCC;margin-bottom: 15px;'></div>
 
   <!-- Géolocalisation -->
   <div style='font-size: 1.2em;'><b>Paramètres de géolocalisation</b></div>
-  Seuil précision (m)
-  <input class='ZoneParamSaisie' type='text' id='TxtPrecision' value="15"><br>
-  <div style='height: 5px;'></div>
+  &nbsp;Seuil de précision <input class='ZoneParamSaisie' type='text' id='TxtPrecision' value="15"> mètres max.<br>
+    <div style='height: 10px;'></div>
+  &nbsp;Temps de géolocalisation <input class='ZoneParamSaisie' type='text' id='TxtTempsMaxLocalisation' value="30"> secondes max.<br>
+    <div style='height: 10px;'></div>
+  &nbsp;Simulation géolocalisation <input type='checkbox' id='ChkSimulation'><br>
+  &nbsp;lat,lon = <input class='ZoneParamSaisie' type='text' id='TxtCoordonnees' value="48.85826187,2.29449563">
 
-  Temps maximal pour la géolocalisation (s)
-  <input class='ZoneParamSaisie' type='text' id='TxtTempsMaxLocalisation' value="30"><br>
-  <div style='height: 5px;'></div>
-
-  <div>
-    Simulation localisation<br>
-    <input type='checkbox' id='ChkSimulation'>
-    <input class='ZoneParamSaisie' type='text' id='TxtCoordonnees' value="48.85826187,2.29449563">
-  </div>
-  <br>
+  <!----------------- Séparateur ------------------------------------------------->
+  <div style='height: 14px; border-bottom: 1px solid #CCC;margin-bottom: 15px;'></div>
 
   <!-- Météo -->
   <div style='font-size: 1.2em;'><b>Paramètres pour la météo</b></div>
-  Seuil de vent (km/h)
-  <input class='ZoneParamSaisie' type='text' id='TxtSeuilVent' value="10"><br>
-  <div style='height: 5px;'></div>
+  &nbsp;Seuil de vent <input class='ZoneParamSaisie' type='text' id='TxtSeuilVent' value="10"> km/h min.<br>
+  <div style='height: 10px;'></div>
 
+  &nbsp;Choix du modèle par défaut<br>
   <div>
-    Choix du modèle par défaut<br>
-    <div>
-      <input type="radio" id="RadArome"  name="modeleMeteo" value="AROME" checked>
-      <label for="RadArome">AROME France</label><br>
-
-      <input type="radio" id="RadArpege" name="modeleMeteo" value="ARPEGE">
-      <label for="RadArpege">ARPEGE Europe</label><br>
-
-      <input type="radio" id="RadIcon"   name="modeleMeteo" value="ICON">
-      <label for="RadIcon">ICON Europe</label><br>
-
-      <input type="radio" id="RadEcmwf"  name="modeleMeteo" value="ECMWF">
-      <label for="RadEcmwf">ECMWF IFS</label>
-    </div>
+    &nbsp;<input type="radio" id="RadArome"  name="modeleMeteo" value="AROME" checked><label for="RadArome">AROME France</label><br>
+    &nbsp;<input type="radio" id="RadArpege" name="modeleMeteo" value="ARPEGE"><label for="RadArpege">ARPEGE Europe</label><br>
+    &nbsp;<input type="radio" id="RadIcon"   name="modeleMeteo" value="ICON"><label for="RadIcon">ICON Europe</label><br>
+    &nbsp;<input type="radio" id="RadEcmwf"  name="modeleMeteo" value="ECMWF"><label for="RadEcmwf">ECMWF IFS</label>
   </div>
-  <div style='height: 5px;'></div>
+  <div style='height: 10px;'></div>
 
-  Nombre de jours de prévision</b><br>
-  <input class='ZoneParamSaisie' type='text' id='TxtNbJours' value="4" placeholder="(1 à 15)"><br>
-  <br>
+  &nbsp;Nombre de jours de prévision <input class='ZoneParamSaisie' type='text' id='TxtNbJours' value="4" placeholder="(1 à 15)">
+
+  <!----------------- Séparateur ------------------------------------------------->
+  <div style='height: 14px; border-bottom: 1px solid #CCC;margin-bottom: 15px;'></div>
 
   <!-- Personnalisation de l'affichage -->
   <div style='font-size: 1.2em;'><b>Personnalisation de l'affichage</b></div>
-  Taille de la police
-  <input class='ZoneParamSaisie' type='text' id='TxtTaillePolice' value="14"><br>
-  <div style='height: 5px;'></div>
+  &nbsp;Taille de la police <input class='ZoneParamSaisie' type='text' id='TxtTaillePolice' value="14"><br>
+
+  <!----------------- Séparateur ------------------------------------------------->
+  <div style='height: 14px; border-bottom: 1px solid #CCC;margin-bottom: 15px;'></div>
 
   <!-- Informations -->
-  <br>
   <div style='font-size: 1.2em;'><b>Informations système</b></div>
-  <div id="TxtVersion">Version de l'application</div>
-  <div id="TxtReseau">Accès réseau :</div>
-  <br>
+  &nbsp;<span id='TxtVersion'>Version de l'application</span><br>
+  &nbsp;<span id='TxtPlateforme'>Plateforme</span><br>
+  &nbsp;<span id='TxtReseau'>Accès réseau</span><br>
 </div>
 
 <script src="param.js"></script>
@@ -171,15 +164,14 @@
 
   <div id='DivBulletin' style='height: 100px;'>
     <span id='Step4' class=classDot></span>&nbsp;
-    <span id='TxtStep4' class=classText>Bulletin météo</span><br>
+    <span id='TxtStep4' class=classText>Bulletin météo et Consultations</span><br>
   </div>
 
-  <div class="button-with-multiline-text">
-    <button id="ButTraitRetour" onclick="ButTraitRetourClick()">Retour</button>
-  </div>
+  <button id="ButTraitRetour" onclick="ButTraitRetourClick()">Retour</button>
   <br>
-  <div id='TxtTraitInfos'>
-  </div>
+  <br>
+  <button id="ButOuvrirOlySee" onclick="ButOuvrirOlySeeClick()">Ouvrir OlySee</button>
+
 </div>
 <script src="traitements.js"></script>
 <script src="geolocalisation.js"></script>
@@ -370,6 +362,13 @@
   </div>
 </div>
 <script src="aide.js"></script>
+
+<div id="panStatus" class="status-overlay" style="display: none;">
+  <div id="status-card">
+    <div id="panStatusIcon" class="spinner"></div>
+    <div id="panStatusText"></div>
+  </div>
+</div>
 
 </body>
 </html>

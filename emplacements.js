@@ -9,7 +9,7 @@ async function AfficheEcranChoixEmplacement()
 {
   pid('scrMeteo').style.display = 'none';
   pid('scrHome').style.display = 'none';
-  await GestionDatabaseEmplacements();                 // Vérifie si pas plus récent sur la database
+  await GestionDatabaseEmplacements();
   CreeListeEmplacements();
   pid('DivChoixEmplacement').innerHTML = HTMLJ;
   pid('scrChoixEmplacement').style.display = 'block';
@@ -195,16 +195,15 @@ function AnalyseTexteVersTableau()
 //-------------------------------------------------------
 // Validation des modifications
 //-------------------------------------------------------
-function ButGestionEmplacementsValiderClick()
+async function ButGestionEmplacementsValiderClick()
 {
   const nouvelleListe = AnalyseTexteVersTableau();
-  const lListeEmplacementsJSON = JSON.stringify(nouvelleListe);
 
   // Sauvegarde emplacements et de la date
+  const lListeEmplacementsJSON = JSON.stringify(nouvelleListe);
   localStorage.setItem("EmplacementsListe", lListeEmplacementsJSON);
-  const lDateLocale = DateSupabase();
-  localStorage.setItem("EmplacementsDate", lDateLocale);
-  GestionDatabaseEmplacements();
+  localStorage.setItem("EmplacementsDate", DateSupabase());
+  await GestionDatabaseEmplacements();
 
   // Affichage de la liste
   pid('scrGestionEmplacements').style.display = 'none';

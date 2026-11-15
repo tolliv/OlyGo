@@ -45,41 +45,34 @@
 
 .ZoneParamSaisie
 {
-  width: 100%;
+  width: 40px;
   box-sizing: border-box;
-  border: none;
+  border: 1px solid #AAA;
   font-family: sans-serif;
   color: blue;
-}
-
-.ZoneParamSaisie2
-{
-  width: 100%;
-  box-sizing: border-box;
-  border: none;
-  font-family: sans-serif;
-  color: blue;
+  text-align: center;
 }
 
 #TxtID
 {
   width: 100%;
-  height: 80px;
+  min-height: 40px;
+  field-sizing: content;
+  resize: none;
+  padding-bottom: 10px;
   box-sizing: border-box;
-  border: none;
+  border: 1px solid #AAA;
   font-family: sans-serif;
   color: blue;
   white-space: pre-wrap;
   word-wrap: break-word;
-  resize: none;
 }
-
 
 #TxtCoordonnees
 {
-  width: 80%;
+  width: 200px;
   box-sizing: border-box;
-  border: none;
+  border: 1px solid #AAA;
   font-family: sans-serif;
   color: blue;
 }
@@ -98,6 +91,19 @@
 }
 
 #ButTesterID
+{
+  height: 30px;
+  width: 100px;
+  border-radius: 10px;
+  background-color: #444;
+  font-size: 14px;
+  color: white;
+  border: 1px solid #222;
+  border-shadow: none;
+  pointer: cursor;
+}
+
+#ButOuvrirOlySeeDepuisParam
 {
   height: 30px;
   width: 100px;

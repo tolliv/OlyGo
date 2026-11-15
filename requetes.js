@@ -201,11 +201,14 @@ async function EnvoiRequetesFIFO()
                 gEmplacementMeteo = gGeoEmplacement;
                 DownloadBulletin(false);
 
-                pid("Step4").style.backgroundColor = ColOK;
-                pid('TxtStep4').innerHTML += "Chargé";
-
                 // Récupère les consultations
                 MiseAjourConsultations();
+
+                pid("Step4").style.backgroundColor = ColOK;
+                pid('TxtStep4').innerHTML += "Chargés";
+
+                // Affiche le bouton pour ouvrir OlySee
+                pid('ButOuvrirOlySee').style.display = 'block';
             }
 
             // Au moins une erreur, les requêtes non envoyées n'ont pas été effacées
@@ -366,23 +369,36 @@ async function EnvoiSingleRequete(nouveauPoint)
 //--------------------------------------------------------------------------------------------------
 // Gestion du Download/Upload des emplacements météo (type 201)
 //--------------------------------------------------------------------------------------------------
+//----- Emplacements Météo -----
 async function GestionDatabaseEmplacements()
 {
-  const lType = "201";
-  const lNomStorage = "Emplacements";
+  await GestionSynchronisationGenerique("201", "Emplacements");
+}
 
+//----- Messages -----
+async function GestionDatabaseMessages()
+{
+  await GestionSynchronisationGenerique("202", "Messages");
+}
+
+//----- Route -----
+async function GestionDatabaseRoute()
+{
+  await GestionSynchronisationGenerique("203", "Route");
+}
+
+//----- Fonction commune -----
+async function GestionSynchronisationGenerique(lType, lNomStorage)
+{
+  const lSynchronisation = pid('ChkSynchronisation').checked;
   let lConnecte = IsConnected();
 
-  // Si connecté
-  if (lConnecte)
+  // Si Synchronisation activée et connecté au réseau
+  if (lSynchronisation && lConnecte)
   {
     // Lecture date actuelle du fichier
     // Si elle n'existe pas, on la crée
-    let lDateLocale = localStorage.getItem(lNomStorage + "Date");
-    if (!lDateLocale)
-    {
-      lDateLocale = 0;
-    }
+    let lDateLocale = localStorage.getItem(lNomStorage + "Date") ?? 0;
 
     // Date la plus récente de la database
     let lCmd;
@@ -393,7 +409,7 @@ async function GestionDatabaseEmplacements()
          + "&limit=1";
     lRetRead = await SupabaseRead(lCmd);
 
-    // -1: erreur base   (valeur par défaut
+    // -1: erreur base   (valeur par défaut)
     // 0: pas de valeur
     // sinon date existante
     let lDateBase = -1;
@@ -405,14 +421,15 @@ async function GestionDatabaseEmplacements()
       if (lRetRead.length > 0)
         lDateBase = lRetRead.data[0].date;
 
-      // Pas de valeur dans la base, on met nulle car c'est la plus ancienne
+      // Pas de valeur dans la base, on met 0 car c'est la plus ancienne
       else
         lDateBase = 0;
     }
 
-    // Erreur de lecture TODO
+    // Erreur de lecture, on ne fait rien
     else
     {
+      lDateLocale = -1;
     }
 
     //----- Traitement -----
@@ -420,37 +437,31 @@ async function GestionDatabaseEmplacements()
     // Doit être écrit : Local -> Database
     if (lDateLocale > lDateBase)
     {
-      console.log("Date locale (" + lDateLocale + ") > date base (" + lDateBase + ")");
-      const lListeEmplacementsJSON = localStorage.getItem(lNomStorage + "Liste") ?? ""; // Coalescence
+      const lListeJSON = localStorage.getItem(lNomStorage + "Liste") ?? ""; // Coalescence
       const nouveauFichier =
       {
           date: lDateLocale,
           user: USER,
           type: lType,
-          msg: lListeEmplacementsJSON
+          msg: lListeJSON
       };
       const lRetWrite = await SupabaseWrite(nouveauFichier);
-      console.log("Ecriture OK : " + lRetWrite);
+      console.log(lNomStorage+ ": écriture dans la Database");
     }
 
     // Doit être lu : Database ->  Local
     else if (lDateLocale < lDateBase)
     {
-      console.log("Date locale (" + lDateLocale + ") < date base (" + lDateBase + ")");
-      const lListeEmplacementsJSON = lRetRead.data[0].msg;
-      localStorage.setItem(lNomStorage + "Liste", lListeEmplacementsJSON);
+      const lListeJSON = lRetRead.data[0].msg;
+      localStorage.setItem(lNomStorage + "Liste", lListeJSON);
       localStorage.setItem(lNomStorage + "Date", lDateBase);
-      console.log("Lecture OK");
+      console.log(lNomStorage + ": lecture depuis la Database");
     }
 
     // Même date, on ne fait rien
     else
     {
-      console.log("Date locale (" + lDateLocale + ") = date base (" + lDateBase + ")");
+      console.log(lNomStorage + ": déjà synchronisé");
     }
   }
-
-  // Pas connecté
-  else
-  {}
 }
