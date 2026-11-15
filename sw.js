@@ -1,4 +1,4 @@
-importScripts('version.js');
+const VERSION = "2611.15a";
 const CACHE_NAME = 'OlyGo'+VERSION;
 const ASSETS = [
   'aide.css',
