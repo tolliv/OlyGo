@@ -24,8 +24,8 @@ async function Localisation(pChoix, choixBouton)
   pid('ButOuvrirOlySee').style.display = 'none';
 
   // Réinitialisation des couleurs et des champs
-  pid('Step1').style.backgroundColor = ColInactif;
-  pid('TxtStep1').innerHTML = "<b>Localisation</b><br>";
+  pid('Step1').style.backgroundColor = ColEnCours;                                                  // On le met à orange dès le début
+  pid('TxtStep1').innerHTML = "<b>Localisation</b> Initialisation ...<br>";
 
   pid('Step2').style.backgroundColor = ColInactif;
   pid('TxtStep2').innerHTML = "<b>Mémorisation</b><br>";
@@ -52,6 +52,7 @@ async function Localisation(pChoix, choixBouton)
   // Affiche l'écran Traitement
   pid('scrHome').style.display = 'none';
   pid('scrTrait').style.display = 'block';
+  await sleep(100);
 
   //----- Localisation -----
   const lPrecision = pid('TxtPrecision').value;

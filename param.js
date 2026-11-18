@@ -220,38 +220,65 @@ async function ButTesterIDClick()
   BoutonEtat('ButTesterID', 'actif');
   pid('txtResultatTestID').innerHTML = "En cours...";
 
-  // On Récupère l'ID du champ
-  const ID = pid('TxtID').value;
-  const lRetDecode = await decodeSupabaseConfig(ID);
-
-  // L'ID est correct
-  if (lRetDecode.url != "")
+  // Boucle unique
+  do
   {
+    // On Récupère l'ID du champ
+    const ID = pid('TxtID').value;
+    if (ID == "")
+    {
+      await sleep(300);
+      pid('txtResultatTestID').innerHTML = "Erreur ID vide";
+      break;
+    }
+
+    const lRetDecode = await decodeSupabaseConfig(ID);
+
+    // L'ID est incorrect
+    if (lRetDecode.url == "")
+    {
+      await sleep(300);
+      pid('txtResultatTestID').innerHTML = "Erreur ID non valide";
+      break;
+    }
+
+    // Test de connexion
+    if (IsConnected() == false)
+    {
+      await sleep(300);
+      pid('txtResultatTestID').innerHTML = "Erreur pas de réseau";
+      break;
+    }
+
+    // L'ID est correct
     API_URL = lRetDecode.url;
     API_KEY = lRetDecode.key;
     USER = lRetDecode.usr;
     const lRetTest = await SupabaseTestConnexion();
 
-    // Si le test est OK, on lit le prénom
-    if (lRetTest == "OK")
+    // Erreur sur l'ID
+    if (lRetTest != "OK")
     {
-      const lRetPrenom = await SupabaseReadPrenom();
-      if (lRetPrenom.status == "OK")
-      {
-        const lPrenom = lRetPrenom.data[0].msg;
-        pid('txtResultatTestID').innerHTML = 'OK : "Suivi de <b>' + lPrenom + '</b>"';
-      }
+      await sleep(300);
+      pid('txtResultatTestID').innerHTML = lRetTest;
+      break;
     }
 
-    else
+    // Lecture Prénom
+    const lRetPrenom = await SupabaseReadPrenom();
+    if (lRetPrenom.status != "OK")
     {
-      pid('txtResultatTestID').innerHTML = lRetTest;
+      await sleep(300);
+      pid('txtResultatTestID').innerHTML = lRetPrenom.status;
+      break;
     }
-  }
-  else
-  {
-    pid('txtResultatTestID').innerHTML = "Erreur sur l'ID";
-  }
+
+    // Tout est OK
+    const lPrenom = lRetPrenom.data[0].msg;
+    await sleep(300);
+    pid('txtResultatTestID').innerHTML = 'OK : "Suivi de <b>' + lPrenom + '</b>"';
+
+  } while (0);
   BoutonEtat('ButTesterID', 'inactif');
 }
 

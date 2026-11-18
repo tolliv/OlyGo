@@ -394,24 +394,17 @@ async function decodeSupabaseConfig(encodedStr) {
 // Envoie un nouveau point dans la base de données
 // renvoie "OK" ou "Erreur .."
 //--------------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------------
-// Envoie un nouveau point dans la base de données
-// renvoie "OK" ou "Erreur .."
-//--------------------------------------------------------------------------------------------------
 async function SupabaseWrite(data)
 {
   let lErreurTimeout = false;
   const controller = new AbortController();
   const signal = controller.signal;
 
-  // 1. Délai pour afficher le message "Travail en cours" (1 seconde)
+  // 1. Délai pour afficher le message "Travail en cours" (2 secondes)
   const dialogId = setTimeout(() =>
   {
-    pid('status-card').style.border = '5px solid #FFF';
-    pid('panStatusIcon').style.display = 'block';
-    pid('panStatusText').innerHTML = "Accès réseau en cours..";
-    pid('panStatus').style.display = 'flex';
-  }, 1000);
+    AfficherAlerte("Accès réseau en cours..", '5px solid #FFF', true);
+  }, 2000);
 
   // 2. Délai pour annuler la requête (5 secondes)
   const timeoutId = setTimeout(() =>
@@ -461,17 +454,15 @@ async function SupabaseWrite(data)
     // Gestion de l'affichage final
     if (lErreurTimeout)
     {
-      pid('panStatusIcon').style.display = 'none';
-      pid('status-card').style.border = '5px solid #F00';
-      pid('panStatusText').innerHTML = "Accès à la base de donnée impossible.<br>Passez en mode avion<br>ou réessayez plus tard !";
+      AfficherAlerte("Accès à la base de donnée impossible.<br>Passez en mode avion<br>ou réessayez plus tard !", '5px solid #F00', false);
       setTimeout(() =>
       {
-        pid('panStatus').style.display = 'none';
+        MasquerAlerte();
       }, 5000);
     }
     else
     {
-      pid('panStatus').style.display = 'none';
+        MasquerAlerte();
     }
   }
 }
@@ -486,14 +477,11 @@ async function SupabaseRead(pCmd)
   const controller = new AbortController();
   const signal = controller.signal;
 
-  // 1. Délai pour afficher le message "Travail en cours" (1 seconde)
+  // 1. Délai pour afficher le message "Travail en cours" (2 secondes)
   const dialogId = setTimeout(() =>
   {
-    pid('status-card').style.border = 'border: 5px solid #FFF';
-    pid('panStatusIcon').style.display = 'block';
-    pid('panStatusText').innerHTML = "Accès réseau en cours..";
-    pid('panStatus').style.display = 'flex';
-  }, 1000);
+    AfficherAlerte("Accès réseau en cours..", '5px solid #FFF', true);
+  }, 2000);
 
   // 2. Délai pour annuler la requête (5 secondes)
   const timeoutId = setTimeout(() =>
@@ -550,19 +538,17 @@ async function SupabaseRead(pCmd)
     // En cas d'erreur de timeout, on affiche un message d'erreur puis on ferme le pannel
     if (lErreurTimeout)
     {
-      pid('panStatusIcon').style.display = 'none';
-      pid('status-card').style.border = '5px solid #F00';
-      pid('panStatusText').innerHTML = "Accès à la base de donnée impossible.<br>Passez en mode avion<br>ou reéssayez plus tard !";
+      AfficherAlerte("Accès à la base de donnée impossible.<br>Passez en mode avion<br>ou réessayez plus tard !", '5px solid #F00', false);
       const dialogId = setTimeout(() =>
       {
-        pid('panStatus').style.display = 'none';
+        MasquerAlerte();
       }, 5000);
     }
 
     // Si c'est une autre erreur TODO
     else
     {
-        pid('panStatus').style.display = 'none';
+        MasquerAlerte();
     }
   }
 }

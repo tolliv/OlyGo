@@ -250,6 +250,24 @@ function BoutonEtat(bouton, etat)
 
 
 //--------------------------------------------------------------------------------------------------
+// Gestion du panel pour les alertes
+// pFlagIcon = true ou false
+//--------------------------------------------------------------------------------------------------
+function AfficherAlerte(pMessage, pBorder, pFlagIcon)
+{
+  pid('panStatusText').innerHTML = pMessage;
+  pid('status-card').style.border = pBorder;
+  pid('panStatusIcon').style.display = (pFlagIcon?'block':'none');
+
+  // Affichage
+  pid('panStatus').style.display = 'flex';
+}
+function MasquerAlerte()
+{
+  pid('panStatus').style.display = 'none';
+}
+
+//--------------------------------------------------------------------------------------------------
 // Test SMS
 //--------------------------------------------------------------------------------------------------
 function TestSMS()

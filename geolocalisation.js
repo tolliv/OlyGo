@@ -88,6 +88,11 @@ function GeolocalisationWatch(pPrecision)
     return;
   }
 
+  // Force un premier affichage
+  gGeoAccuracy = 9000;
+  gGeoStatus++;
+  pid('panDebugTraitement').innerHTML = "Geolocalisation<br>";
+
   // Surveillance de la position
   gGeoWatchId = navigator.geolocation.watchPosition
   (
@@ -98,6 +103,7 @@ function GeolocalisationWatch(pPrecision)
       gGeoLongitude = position.coords.longitude;
       gGeoAccuracy = Math.round(position.coords.accuracy);
       gGeoAltitude = Math.round(position.coords.altitude);
+      pid('panDebugTraitement').innerHTML += gGeoAccuracy + "<br>";
       if (gGeoAccuracy <= pPrecision)
       {
         gGeoStatus = 0; // Précision atteinte

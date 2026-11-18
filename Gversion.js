@@ -1,8 +1,9 @@
 //==================================================================================================
+// 2611.18c
 // GVersion.js : Gobal Version
 // Change la Date dans les fichiers du répertoire courant
 // S'exécute via node.js : node gversion.js
-// Note : il faut créer le fichier Gdate.ref avec la date du jour ex: 2611.10a
+// Note : il faut créer le fichier date.ref avec la date du jour exemple 2611.15H
 //==================================================================================================
 
 import fs from 'node:fs/promises';
@@ -44,7 +45,7 @@ async function replaceInDir(dir, searchStr, replaceStr, extensions = ['.js', '.c
           {
             const newContent = content.replaceAll(searchStr, replaceStr);
             await fs.writeFile(fullPath, newContent, 'utf8');
-            console.log(GREEN + fullPath + RESET + " mis à jour");
+            console.log(YELLOW + fullPath + RESET + " mis à jour");
           }
         }
       }
@@ -94,7 +95,7 @@ async function main()
   console.log("----- GVersion -----");
   const lDateRef = await readDateRef();
   const lDateNew = formatDateRef();
-  console.log("Version actuelle   " + YELLOW + lDateRef + RESET);
+  console.log("Version actuelle   " + lDateRef);
 
   // Construction de la nouvelle date
   if (lDateRef == "")

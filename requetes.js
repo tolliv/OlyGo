@@ -367,7 +367,7 @@ async function EnvoiSingleRequete(nouveauPoint)
 
 
 //--------------------------------------------------------------------------------------------------
-// Gestion du Download/Upload des emplacements météo (type 201)
+// Gestion du Download/Upload des fichiers en commun
 //--------------------------------------------------------------------------------------------------
 //----- Emplacements Météo -----
 async function GestionDatabaseEmplacements()
