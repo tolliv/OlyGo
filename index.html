@@ -1,5 +1,5 @@
 <!-------------------------------------------------------
- Programme OlyGo VERSION = "2611.19a"
+ Programme OlyGo VERSION = "2611.19b"
 --------------------------------------------------------->
 
 <!----- HEADER ------------------------------------------->
@@ -77,11 +77,11 @@
   ID
   <textarea type='texte' id='TxtID'></textarea><br>
   <div style='height: 5px;'></div>
-  <button id="ButCopierID" onclick="ButCopierIDClick()" style='display: in-line;'>Copier</button><br>
+  <button id='ButCopierID' onclick='ButCopierIDClick()' style='display: in-line;'>Copier</button><br>
   <div style='height: 5px;'></div>
-  <button id="ButTesterID" onclick="ButTesterIDClick()">Tester</button> <span id='txtResultatTestID'></span>
+  <button id='ButTesterID' onclick='ButTesterIDClick()'>Tester</button> <span id='txtResultatTestID'></span>
   <div style='height: 5px;'></div>
-  <button id="ButOuvrirOlySeeDepuisParam" onclick="ButOuvrirOlySeeDepuisParamClick()">OlySee</button>
+  <button id='ButOuvrirOlySeeDepuisParam' onclick='ButOuvrirOlySeeDepuisParamClick()'>OlySee</button>
   <div style='height: 10px;'></div>
 
   &nbsp;Synchronisation automatique <input type='checkbox' id='ChkSynchronisation' checked><br>
@@ -96,7 +96,10 @@
   &nbsp;Temps de géolocalisation <input class='ZoneParamSaisie' type='text' id='TxtTempsMaxLocalisation' value='30'> secondes max.<br>
     <div style='height: 10px;'></div>
   &nbsp;Simulation géolocalisation <input type='checkbox' id='ChkSimulation'><br>
-  &nbsp;lat,lon = <input class='ZoneParamSaisie' type='text' id='TxtCoordonnees' value="48.85826187,2.29449563">
+  &nbsp;lat,lon = <input class='ZoneParamSaisie' type='text' id='TxtCoordonnees' value="48.85826187,2.29449563"><br>
+  <div style='height: 5px;'></div>
+  <button id="ButTesterGeoloc" onclick="ButTesterGeolocClick()">Tester</button> <span id='txtResultatTestGeoloc'></span>
+  <div style='height: 5px;'></div>
 
   <!----------------- Séparateur ------------------------------------------------->
   <div style='height: 14px; border-bottom: 1px solid #CCC;margin-bottom: 15px;'></div>

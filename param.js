@@ -293,3 +293,55 @@ async function ButOuvrirOlySeeDepuisParamClick()
   await sleep(300);
   BoutonEtat('ButOuvrirOlySeeDepuisParam', 'inactif'  );
 }
+
+//--------------------------------------------------------------------------------------------------
+// Tester la géolocalisation
+//--------------------------------------------------------------------------------------------------
+async function ButTesterGeolocClick()
+{
+  BoutonEtat('ButTesterGeoloc', 'actif');
+  pid('txtResultatTestGeoloc').innerHTML = "En cours...";
+  const precision = pid('TxtPrecision').value;
+
+  // Lancement géolocalisation
+  GeolocalisationWatch(Number(precision));
+
+  // Boucle d'attente de la fin
+  let lTimeout = pid('TxtTempsMaxLocalisation').value * 10; // Car tempo de 100ms
+  do
+  {
+    // Période vérification de l'état
+    await sleep(100);
+    const lStatus = gGeoStatus;
+
+    // Si nouvelle position valide, on l'affiche
+    if (lStatus > 1)
+    {
+      pid('txtResultatTestGeoloc').innerHTML = "Précision = " + gGeoAccuracy + "m";
+    }
+
+    // Limitation temps
+    lTimeout--;
+    if (lTimeout <= 0)
+    {
+      gGeoStatus = -3;
+      break;
+    }
+  } while (gGeoStatus > 0); // Sortie si précision atteinte ou Erreur
+
+  // Géolocalisation réussie
+  if (gGeoStatus == 0)
+  {
+    pid('txtResultatTestGeoloc').innerHTML  = "OK : Précision = <b>" + gGeoAccuracy + "m</b>";
+  }
+
+  // Géolocalisation échouée
+  else
+  {
+    pid('TxtMeteo').innerHTML += "Erreur : ";
+    if (gGeoStatus == -1)   pid('txtResultatTestGeoloc').innerHTML = "Géolocalisation non supportée";
+    if (gGeoStatus == -2)   pid('txtResultatTestGeoloc').innerHTML = "Permission refusée";
+    if (gGeoStatus == -3)   pid('txtResultatTestGeoloc').innerHTML = "Précision insuffisante";
+  }
+  BoutonEtat('ButTesterGeoloc', 'inactif');
+}
