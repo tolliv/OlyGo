@@ -149,7 +149,7 @@ function ButTexteEndClick()
 //-------------------------------------------------------
 async function AjouterLigne(pNouvellesLignes)
 {
-  let lTexte = localStorage.getItem('TxtMessages');
+  let lTexte = localStorage.getItem('MessagesListe');
   if (lTexte == null)
     lTexte = "";
   lTexte += pNouvellesLignes;
