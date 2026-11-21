@@ -208,7 +208,7 @@ function CreeLienOlySee()
   let lLien = "";
   const lTxtID = pid('TxtID').value;
   if (lTxtID != "")
-    lLien = "https://tolliv.github.io/OlySee/index.html?admin=" + lTxtID;
+    lLien = gServerOlySee + "index.html?admin=" + lTxtID;
   return (lLien);
 }
 
