@@ -239,7 +239,7 @@ function ButTraitRetourClick()
 async function ButOuvrirOlySeeClick()
 {
   BoutonEtat('ButOuvrirOlySee', 'actif');
-  const lLien = CreeLienOlySee();
+  const lLien = CreeLienOlySeeAdmin();
 
   // Ouvre le lien dans un nouvel onglet
   if (lLien)

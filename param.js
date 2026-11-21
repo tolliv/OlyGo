@@ -11,6 +11,7 @@ function AfficherEcranPARAM()
   let lConnecte = IsConnected();
   pid('TxtReseau').innerHTML = "Accès réseau : <b>" + (lConnecte?"Oui":"Non") + "</b>";
   pid('txtResultatTestID').innerHTML = "";
+  pid('txtResultatCopierLien').innerHTML = "";
   pid('scrParam').style.display = 'block';
 }
 
@@ -182,33 +183,50 @@ function changerTaillePoliceZoneSaisieQuery(NomClasse, nouvelleTaille)
 //-------------------------------------------------------
 // Copier l'adresse complète dans le presse-papier
 //-------------------------------------------------------
-async function ButCopierIDClick()
+async function ButCopierLienClick()
 {
-  BoutonEtat('ButCopierID', 'actif');
-
-  const lLien = CreeLienOlySee();
+  BoutonEtat('ButCopierLien', 'actif');
+  const lLien = CreeLienOlySeeFamille();
   try
   {
     await navigator.clipboard.writeText(lLien);
+    await sleep(300);
+    pid('txtResultatCopierLien').innerHTML = "Lien OlySee Famille copié";
   }
   catch (err)
   {
     console.error("Erreur lors de la copie : ", err);
+    await sleep(300);
   }
 
-  await sleep(300);
-  BoutonEtat('ButCopierID', 'inactif');
+  BoutonEtat('ButCopierLien', 'inactif');
 }
 
 //--------------------------------------------------------------------------------------------------
-// Création d'un lien vers OlySee
+// Création d'un lien Famille vers OlySee
 //--------------------------------------------------------------------------------------------------
-function CreeLienOlySee()
+function CreeLienOlySeeFamille()
 {
   let lLien = "";
   const lTxtID = pid('TxtID').value;
   if (lTxtID != "")
-    lLien = gServerOlySee + "index.html?admin=" + lTxtID;
+    lLien = gServerOlySee + "index.html?id=" + lTxtID;
+  return (lLien);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Création d'un lien Admin vers OlySee
+//--------------------------------------------------------------------------------------------------
+async function CreeLienOlySeeAdmin()
+{
+  let lLien = "";
+  const lTxtID = pid('TxtID').value;
+  if (lTxtID != "")
+  {
+    const lRetDecode = await decodeSupabaseConfig(lTxtID);
+    const lRetEncode = await encodeSupabaseConfig(lRetDecode.url, lRetDecode.key, lRetDecode.usr, true);
+    lLien = gServerOlySee + "index.html?admin=" + lRetEncode;
+  }
   return (lLien);
 }
 
@@ -283,12 +301,12 @@ async function ButTesterIDClick()
 }
 
 //--------------------------------------------------------------------------------------------------
-// Ouvrir OlySee
+// Ouvrir OlySee en mode Admin
 //--------------------------------------------------------------------------------------------------
 async function ButOuvrirOlySeeDepuisParamClick()
 {
   BoutonEtat('ButOuvrirOlySeeDepuisParam', 'actif');
-  const lLien = CreeLienOlySee();
+  const lLien = await CreeLienOlySeeAdmin();
   window.open(lLien, '_blank');
   await sleep(300);
   BoutonEtat('ButOuvrirOlySeeDepuisParam', 'inactif'  );

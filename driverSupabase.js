@@ -345,7 +345,8 @@ async function encodeSupabaseConfig(url, key, usr, admin)
 //--------------------------------------------------------------------------------------------------
 // Décode et décompresse la configuration
 //--------------------------------------------------------------------------------------------------
-async function decodeSupabaseConfig(encodedStr) {
+async function decodeSupabaseConfig(encodedStr)
+{
     const emptyRes = { url: "", key: "", usr: "", admin: false };
     try {
         if (!encodedStr) return emptyRes;
